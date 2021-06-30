@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "666109140956",
+    "project_id": "service-chowk",
+    "storage_bucket": "service-chowk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666109140956:android:ddd18f744440adae197919",
+        "android_client_info": {
+          "package_name": "com.servicechowk.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666109140956-2lfc5hnae567co6ehm6ika0o7e87h4ek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.servicechowk.app",
+            "certificate_hash": "838254a684ea0dfb2370be5cbc0d2f4abb295e11"
+          }
+        },
+        {
+          "client_id": "666109140956-kui0a4nnn1nhibdfi5rfa04h0peo556l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADOMk45te4jhjivvXfq8KI51dygCPAaa0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666109140956-kui0a4nnn1nhibdfi5rfa04h0peo556l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
