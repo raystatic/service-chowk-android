@@ -55,7 +55,7 @@
             android:orientation="vertical"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:layout_centerInParent="true"
+            android:layout_marginTop="50dp"
             android:visibility="gone"
             android:id="@+id/linPhone">
 
@@ -89,6 +89,8 @@
                     android:focusable="true"
                     android:clickable="true"
                     android:id="@+id/etPhone"
+                    android:textSize="14sp"
+                    android:textColorHint="@color/black"
                     android:hint="Enter phone number"/>
 
                 <TextView
@@ -119,9 +121,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="50dp"
             android:paddingStart="32dp"
-            android:paddingEnd="32dp">
+            android:paddingEnd="32dp"
+            android:id="@+id/relOTP"
+            android:visibility="visible">
 
             <com.servicechowk.app.other.OtpEditText
                 android:id="@+id/et_otp"
@@ -130,7 +134,7 @@
                 android:cursorVisible="false"
                 android:digits="1234567890"
                 android:inputType="number"
-                android:maxLength="4"
+                android:maxLength="6"
                 android:textIsSelectable="false"
                 android:textSize="30sp"
                 android:layout_marginTop="10dp"/>
@@ -138,10 +142,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Otp sent to +91 9650124756"
                 android:textColor="@color/black"
+                android:text="OTP SENT to 9650124764"
                 android:layout_below="@+id/et_otp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:id="@+id/tvInfo"/>
+
+            <ProgressBar
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/chateau_green"
+                android:layout_toEndOf="@+id/tvInfo"
+                android:layout_alignBottom="@+id/tvInfo"
+                android:layout_alignTop="@+id/tvInfo"
+                android:layout_marginStart="10dp"
+                android:indeterminate="true"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvInfo"
+                app:backgroundTint="@color/chateau_green"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Verify"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:id="@+id/btnVerify"/>
 
         </RelativeLayout>
 

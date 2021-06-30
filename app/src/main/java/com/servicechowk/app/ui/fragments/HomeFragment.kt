@@ -1,4 +1,4 @@
-package com.servicechowk.app.ui.home
+package com.servicechowk.app.ui.fragments
 
 import android.os.Bundle
 import android.view.View

@@ -6,11 +6,12 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.ActionMode
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
 import com.servicechowk.app.R
 
 class OtpEditText : AppCompatEditText {
     private var mSpace = 24f //24 dp by default, space between the lines
-    private var mNumChars = 4f
+    private var mNumChars = 6f
     private var mLineSpacing = 8f //8dp by default, height of the text from our lines
     private val mMaxLength = 6
     private var mLineStroke = 2f
@@ -37,7 +38,7 @@ class OtpEditText : AppCompatEditText {
         mLineStroke *= multi
         mLinesPaint = Paint(paint)
         mLinesPaint!!.strokeWidth = mLineStroke
-        mLinesPaint!!.color = resources.getColor(R.color.danger)
+        mLinesPaint!!.color = ContextCompat.getColor(context,R.color.chateau_green)
         setBackgroundResource(0)
         mSpace *= multi //convert to pixels for our density
         mLineSpacing *= multi //convert to pixels for our density

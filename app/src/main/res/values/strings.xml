@@ -4,7 +4,10 @@
     <string name="login_as_provider">Login as Provider</string>
     <string name="your_profile">Your Profile</string>
     <string name="login">Login</string>
+    <string name="otp_verification">OTP Verification</string>
     <string name="empty_phone">Phone number cannot be empty</string>
     <string name="invalid_phone">Invalid Phone number</string>
+    <string name="please_try_again">Something went wrong.. Please try again</string>
+
 
 </resources>

@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.servicechowk.app.ui.home.HomeFragment"
+        android:name="com.servicechowk.app.ui.fragments.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
@@ -13,6 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.servicechowk.app.ui.login.LoginFragment"
-        android:label="LoginFragment" />
+        android:name="com.servicechowk.app.ui.fragments.LoginFragment"
+        android:label="LoginFragment" >
+    </fragment>
 </navigation>
