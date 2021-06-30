@@ -35,7 +35,7 @@
                 android:id="@+id/btnEnd"
                 android:textStyle="bold"
                 android:textSize="14sp"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:layout_centerVertical="true"
                 android:text="@string/login_as_provider"
                 android:layout_alignParentEnd="true"/>

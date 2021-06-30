@@ -11,6 +11,5 @@
     <color name="chateau_green">#4CB962</color>
     <color name="casablanca">#F3B149</color>
     <color name="athens_gray">#F8F9FA</color>
-
-
+    <color name="danger">#FF5858</color>
 </resources>
