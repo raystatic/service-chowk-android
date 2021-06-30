@@ -1,4 +1,4 @@
-package com.servicechowk.app
+package com.servicechowk.app.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +14,5 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Snackbar.make(binding.root,"This is a text",Snackbar.LENGTH_LONG).show()
     }
 }

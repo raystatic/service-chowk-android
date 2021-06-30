@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">ServiceChowk</string>
+    <string name="app_name">Service Chowk</string>
+
+    <string name="login_as_provider">Login as Provider</string>
+
+    <string name="your_profile">Your Profile</string>
+
 </resources>
