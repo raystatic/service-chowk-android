@@ -35,7 +35,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/imgBack"
                 android:layout_centerVertical="true"/>
 

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/athens_gray">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/athens_gray"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:id="@+id/imgBack"
+                android:padding="10dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/imgBack"
+                android:layout_centerVertical="true"/>
+
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="360dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/cardImg">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/person"
+                android:id="@+id/imgProfile"
+                android:background="@color/white"/>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:layout_below="@+id/cardImg"
+            android:layout_marginTop="10dp"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:textSize="14sp"
+                    android:id="@+id/etName"
+                    android:hint="Enter your name"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etWorkField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:clickable="true"
+                    android:hint="Choose your Work Field"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:clickable="true"
+                    android:hint="Choose your City"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etLocality"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:hint="Enter your locality"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:hint="Enter your Phone Number"
+                    android:textColor="@color/black"
+                    android:inputType="number"
+                    android:textColorHint="@color/gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/et_bg"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <TextView
+                        android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Do you have equipment"
+                        android:textColor="@color/black"
+                        />
+
+                    <EditText
+                        android:textSize="14sp"
+                        android:id="@+id/etEquipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/et_bg"
+                        android:padding="16dp"
+                        android:text="No"
+                        android:inputType="none"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:drawableEnd="@drawable/ic_down"
+                        android:textAlignment="center"/>
+
+                </LinearLayout>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etEducation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:hint="Education (Optional)"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etLastWorkAt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:hint="Enter Last work At"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etAadhar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:text="Tap to upload Aadhar Card"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:drawablePadding="10dp"
+                    app:drawableStartCompat="@drawable/ic_attach" />
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:text="Tap to upload Photo"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:drawablePadding="10dp"
+                    app:drawableStartCompat="@drawable/ic_attach" />
+
+                <EditText
+                    android:textSize="14sp"
+                    android:id="@+id/etPhotoOfWork"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:layout_marginTop="10dp"
+                    android:padding="16dp"
+                    android:text="Tap to upload Photo of Work"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:drawablePadding="10dp"
+                    app:drawableStartCompat="@drawable/ic_attach" />
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+</LinearLayout>

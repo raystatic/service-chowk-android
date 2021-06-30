@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -160,6 +161,7 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                         requireContext().showToast("Login success")
                         val user = it.result?.user
                         Log.d(TAG, "signInWithPhoneAuthCredential: $user")
+                        findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
                     }else{
                         Log.d(TAG, "signInWithPhoneAuthCredential: ${it.exception}")
                         if (it.exception is FirebaseAuthInvalidCredentialsException){
