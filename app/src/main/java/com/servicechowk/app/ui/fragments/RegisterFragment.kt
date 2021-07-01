@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
@@ -37,6 +38,7 @@ import com.servicechowk.app.other.Extensions.showToast
 import com.servicechowk.app.other.Extensions.validateIsNotError
 import com.servicechowk.app.other.Status
 import com.servicechowk.app.other.Utility
+import com.servicechowk.app.ui.MainActivity
 import com.servicechowk.app.ui.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -473,6 +475,10 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
             }
 
 
+            imgBack.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
 
             btnRegister.setOnClickListener {
                 if (
@@ -513,6 +519,12 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 }else{
                     return@setOnClickListener
                 }
+            }
+
+            btnSignOut.setOnClickListener {
+                auth.signOut()
+                startActivity(Intent(requireActivity(),MainActivity::class.java))
+                requireActivity().finish()
             }
 
         }

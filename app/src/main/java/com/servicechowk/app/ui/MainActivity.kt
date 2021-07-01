@@ -2,10 +2,13 @@ package com.servicechowk.app.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.servicechowk.app.R
 import com.servicechowk.app.databinding.ActivityMainBinding
 import com.servicechowk.app.other.Utility
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

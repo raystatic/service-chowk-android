@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.auth.User
 import com.servicechowk.app.R
 import com.servicechowk.app.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,15 +25,10 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
-        initUI()
-
         val user = auth.currentUser
+        initUI(user)
 
-        println("USERDEUBUG HOME: ${user?.uid}")
 
-        if(user != null){
-            findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
-        }
 
         subscribeToObservers()
 
@@ -41,12 +38,23 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
     }
 
-    private fun initUI() {
+    private fun initUI(user:FirebaseUser?) {
 
         binding.apply {
-            btnEnd.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+
+            if (user == null){
+                btnEnd.text = "Login as Provider"
+            }else{
+                btnEnd.text ="Profile"
             }
+
+            btnEnd.setOnClickListener {
+                if (user == null) findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
+            }
+
+
+
         }
 
     }

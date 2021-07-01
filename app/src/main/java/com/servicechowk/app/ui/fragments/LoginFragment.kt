@@ -54,6 +54,10 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
             relOTP.isVisible = false
             linPhone.isVisible = true
 
+            imgBack.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
             btnNext.setOnClickListener {
                 val number = etPhone.text.toString()
                 if (number.isEmpty()){
