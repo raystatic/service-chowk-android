@@ -27,7 +27,7 @@ class ProvidersAdapter(
                     .into(imgProfile)
 
                 tvName.text = user.name
-               // tvVerified.isVisible = user.isVerified == true
+                tvVerified.isVisible = user.isVerified == true
                 tvWorkField.text = user.workField
                 val location = "${user.locality}, ${user.city}"
                 tvLocation.text = location

@@ -2,6 +2,7 @@ package com.servicechowk.app.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -43,7 +44,10 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
             },
             onViewProfile = {
-
+                val bundle = bundleOf(
+                        "userId" to it.id
+                )
+                findNavController().navigate(R.id.action_homeFragment_to_providerProfileViewFragment,bundle)
             }
         )
 

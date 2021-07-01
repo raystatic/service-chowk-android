@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_providerProfileViewFragment"
+            app:destination="@id/providerProfileViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -27,4 +30,8 @@
         android:id="@+id/registerFragment"
         android:name="com.servicechowk.app.ui.fragments.RegisterFragment"
         android:label="RegisterFragment" />
+    <fragment
+        android:id="@+id/providerProfileViewFragment"
+        android:name="com.servicechowk.app.ui.fragments.ProviderProfileViewFragment"
+        android:label="ProviderProfileViewFragment" />
 </navigation>
