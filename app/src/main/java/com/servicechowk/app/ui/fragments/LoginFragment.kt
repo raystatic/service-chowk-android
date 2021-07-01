@@ -159,6 +159,8 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        binding.btnVerify.isEnabled = false
+        binding.btnVerify.text = "Verifying"
         auth.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful){
@@ -171,6 +173,8 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                         if (it.exception is FirebaseAuthInvalidCredentialsException){
                             requireActivity().showToast("Incorrect OTP!")
                         }
+                        binding.btnVerify.isEnabled = true
+                        binding.btnVerify.text = "Verify"
                     }
                 }
     }

@@ -90,7 +90,7 @@
                     android:clickable="true"
                     android:id="@+id/etPhone"
                     android:textSize="14sp"
-                    android:textColorHint="@color/black"
+                    android:textColorHint="@color/gray"
                     android:hint="Enter phone number"/>
 
                 <TextView
