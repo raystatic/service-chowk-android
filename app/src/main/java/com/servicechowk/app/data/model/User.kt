@@ -13,7 +13,8 @@ data class User(
     var lastWorkAt:String?="",
     var photoId:String?="",
     var photo:String?="",
-    var workPhoto:String?=""
+    var workPhoto:String?="",
+    var isVerified:Boolean?=false
 ){
     constructor():this("")
 }
