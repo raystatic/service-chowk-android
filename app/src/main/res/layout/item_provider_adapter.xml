@@ -74,21 +74,23 @@
             android:id="@+id/tvWorkField"
             android:drawablePadding="5dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Baprola, New delhi"
-            android:textColor="@color/black"
-            android:drawableStart="@drawable/ic_baseline_location_on_24"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:id="@+id/tvLocation"
-            android:layout_toEndOf="@+id/tvWorkField"
-            android:layout_marginStart="16dp"
-            android:drawablePadding="5dp"/>
-
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Baprola, New delhi"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_baseline_location_on_24"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:id="@+id/tvLocation"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:layout_toEndOf="@+id/tvWorkField"
+        android:drawablePadding="5dp"
+        android:layout_marginTop="10dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
