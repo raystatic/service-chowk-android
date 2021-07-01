@@ -15,4 +15,11 @@ object Constants {
         "Ac Repair"
     )
 
+    const val REQUEST_PERMISSION_CODE = 1
+    const val ASK_PERMISSION = "You are required to accept permissions"
+
+    const val AADHAR_NAME = "aadhar.jpg"
+    const val PROFILE_NAME = "profile.jpg"
+    const val WORK_PHOTO_NAME = "work_photo.jpg"
+
 }

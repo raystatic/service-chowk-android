@@ -136,18 +136,43 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray"/>
 
-                <EditText
-                    android:textSize="14sp"
-                    android:id="@+id/etPhone"
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/et_bg"
-                    android:layout_marginTop="10dp"
-                    android:padding="16dp"
-                    android:hint="Enter your Phone Number"
-                    android:textColor="@color/black"
-                    android:inputType="number"
-                    android:textColorHint="@color/gray"/>
+                    android:paddingStart="10dp">
+
+                    <EditText
+                        android:textSize="14sp"
+                        android:id="@+id/etPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/et_bg"
+                        android:layout_marginTop="10dp"
+                        android:padding="16dp"
+                        android:hint="Enter your Phone Number"
+                        android:textColor="@color/black"
+                        android:inputType="none"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:layout_marginStart="5dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/tvCode"
+                        android:textColorHint="@color/gray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+91"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:id="@+id/tvCode"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -218,24 +243,12 @@
                     android:background="@drawable/et_bg"
                     android:layout_marginTop="10dp"
                     android:padding="16dp"
-                    android:text="Tap to upload Aadhar Card"
+                    android:hint="Tap to upload Aadhar Card"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray"
                     android:drawablePadding="10dp"
-                    app:drawableStartCompat="@drawable/ic_attach" />
-
-                <EditText
-                    android:textSize="14sp"
-                    android:id="@+id/etPhoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/et_bg"
-                    android:layout_marginTop="10dp"
-                    android:padding="16dp"
-                    android:text="Tap to upload Photo"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    android:drawablePadding="10dp"
+                    android:focusable="false"
+                    android:inputType="none"
                     app:drawableStartCompat="@drawable/ic_attach" />
 
                 <EditText
@@ -246,11 +259,30 @@
                     android:background="@drawable/et_bg"
                     android:layout_marginTop="10dp"
                     android:padding="16dp"
-                    android:text="Tap to upload Photo of Work"
+                    android:hint="Tap to upload Photo of Work"
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray"
                     android:drawablePadding="10dp"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:clickable="true"
                     app:drawableStartCompat="@drawable/ic_attach" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Register"
+                    app:backgroundTint="@color/chateau_green"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:cornerRadius="7dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingTop="16dp"
+                    android:textAllCaps="false"
+                    android:paddingBottom="16dp"
+                    android:id="@+id/btnRegister"/>
 
 
             </LinearLayout>
