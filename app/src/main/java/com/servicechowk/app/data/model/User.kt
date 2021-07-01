@@ -14,4 +14,6 @@ data class User(
     var photoId:String?="",
     var photo:String?="",
     var workPhoto:String?=""
-)
+){
+    constructor():this("")
+}

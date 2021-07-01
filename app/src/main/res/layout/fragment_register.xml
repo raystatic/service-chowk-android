@@ -51,29 +51,11 @@
         android:padding="16dp">
 
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="360dp"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/cardImg">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/person"
-                android:id="@+id/imgProfile"
-                android:background="@color/white"/>
-
-        </androidx.cardview.widget.CardView>
-
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            android:layout_below="@+id/cardImg"
             android:layout_marginTop="10dp"
             android:overScrollMode="never">
 
@@ -81,6 +63,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="360dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/cardImg">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/person"
+                        android:id="@+id/imgProfile"
+                        android:scaleType="centerCrop"
+                        android:background="@color/white"/>
+
+                </androidx.cardview.widget.CardView>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -251,6 +251,31 @@
                     android:inputType="none"
                     app:drawableStartCompat="@drawable/ic_attach" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:id="@+id/relAadhar"
+                    android:padding="16dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/imgAadhar"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aadhar.jpg uploaded"
+                        android:textColor="@color/chateau_green"
+                        android:layout_toEndOf="@+id/imgAadhar"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
                 <EditText
                     android:textSize="14sp"
                     android:id="@+id/etPhotoOfWork"
@@ -268,10 +293,36 @@
                     android:clickable="true"
                     app:drawableStartCompat="@drawable/ic_attach" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg"
+                    android:id="@+id/relWorkPhoto"
+                    android:padding="16dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/imgWorkPhoto"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Work.jpg uploaded"
+                        android:textColor="@color/chateau_green"
+                        android:layout_toEndOf="@+id/imgWorkPhoto"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+
+
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Register"
+                    android:text="Upload Details"
                     app:backgroundTint="@color/chateau_green"
                     android:textColor="@color/white"
                     android:textStyle="bold"

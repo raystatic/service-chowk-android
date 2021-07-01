@@ -20,6 +20,7 @@ object Extensions {
         val input = this.text.toString()
         if (input.isEmpty()){
             this.setError(errorMessage)
+            this.requestFocus()
             return false
         }
         this.setError(null)

@@ -1,43 +1,42 @@
 package com.servicechowk.app.ui.fragments
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.ContentValues
 import android.content.Context.MODE_PRIVATE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.servicechowk.app.R
 import com.servicechowk.app.data.model.User
 import com.servicechowk.app.databinding.ChooserDialogBinding
 import com.servicechowk.app.databinding.FragmentRegisterBinding
+import com.servicechowk.app.databinding.UploadingDialogBinding
 import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Extensions.showSnack
 import com.servicechowk.app.other.Extensions.showToast
 import com.servicechowk.app.other.Extensions.validateIsNotError
 import com.servicechowk.app.other.Status
 import com.servicechowk.app.other.Utility
-import com.servicechowk.app.other.sdk29AndUp
 import com.servicechowk.app.ui.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +45,6 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.lang.Exception
 import java.util.*
@@ -58,7 +56,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     private val TAG = "STORAGEDEBUG"
 
-    private var _binding:FragmentRegisterBinding?=null
+    private var _binding: FragmentRegisterBinding?=null
     private val binding:FragmentRegisterBinding get() = _binding!!
 
 
@@ -78,7 +76,12 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     private var currentFileName = ""
 
+    private lateinit var uploading:Dialog
+    private lateinit var uploadingDialogBinding:UploadingDialogBinding
 
+    private var profileUrl = ""
+    private var aadharUrl = ""
+    private var workPhotoUrl = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,14 +93,13 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     binding.root.showSnack("Couldn't Save Image!")
                     currentFileName = ""
                 }else{
-                    binding.root.showSnack("File saved")
                     lifecycleScope.launch {
                         val file = loadImageFromInternalStorage(currentFileName)
                         file?.let {
                             Log.d(TAG, "onCreate: File loaded: ${it.absolutePath} | ${it.path} | ${it.canonicalPath}}")
                             try {
                                 val stream = FileInputStream(it)
-                                vm.uploadFile(currentRef.child(currentFileName),stream)
+                                vm.uploadFile(currentRef.child(currentFileName),stream,currentFileName)
                             }catch (e:Exception){
                                 e.printStackTrace()
                                 binding.root.showSnack("File not found.")
@@ -178,19 +180,77 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     private fun subscribeToObservers() {
 
+        vm.addingUser.observe(viewLifecycleOwner,{
+           binding.apply {
+               when(it.status){
+                   Status.SUCCESS -> {
+                        if (it.data!=null && it.data){
+                            root.showSnack("User updated successfully")
+                        }else{
+                            root.showSnack(Constants.SOMETHING_WENT_WRONG)
+                        }
+                       if (uploading.isShowing) uploading.cancel()
+                   }
+
+                   Status.ERROR -> {
+                       if (uploading.isShowing) uploading.cancel()
+                       root.showSnack(it.message.toString())
+                   }
+
+                   Status.LOADING -> {
+                       showProgressDialog("Adding user...")
+                   }
+               }
+           }
+        })
+
         vm.uploadedFileUrl.observe(viewLifecycleOwner, {
             binding.apply {
                 when (it.status) {
                     Status.SUCCESS -> {
-                        Log.d(TAG, "subscribeToObservers: success: ${it.data}")
+                        it.data?.let {
+                            when(it.second){
+                                Constants.AADHAR_NAME -> {
+                                    etAadhar.isVisible = false
+                                    relAadhar.isVisible = true
+                                    aadharUrl = it.first
+                                    Glide.with(requireContext())
+                                        .load(aadharUrl)
+                                        .into(imgAadhar)
+                                }
+                                Constants.WORK_PHOTO_NAME -> {
+                                    etPhotoOfWork.isVisible = false
+                                    relWorkPhoto.isVisible = true
+                                    workPhotoUrl = it.first
+                                    Glide.with(requireContext())
+                                        .load(workPhotoUrl)
+                                        .into(imgWorkPhoto)
+                                }
+                                Constants.PROFILE_NAME -> {
+                                    profileUrl = it.first
+                                    Glide.with(requireContext())
+                                        .load(profileUrl)
+                                        .placeholder(R.drawable.person)
+                                        .error(R.drawable.person)
+                                        .into(imgProfile)
+                                }
+                                else -> {
+
+                                }
+                            }
+                        } ?: kotlin.run {
+                            root.showSnack(Constants.SOMETHING_WENT_WRONG)
+                        }
+                        if (uploading.isShowing) uploading.cancel()
                     }
 
                     Status.ERROR -> {
+                        if (uploading.isShowing) uploading.cancel()
                         root.showSnack(it.message.toString())
                     }
 
                     Status.LOADING -> {
-
+                        showProgressDialog("Uploading File. Please wait..")
                     }
                 }
             }
@@ -202,23 +262,76 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     Status.SUCCESS -> {
                         val data = it.data
                         println("USERDEBUG: $data")
+                        setUserData(data)
                         newUser = User(
                             id = auth.currentUser?.uid.toString()
                         )
                         val phone = auth.currentUser?.phoneNumber
                         etPhone.setText(phone?.substring(range = 3 until phone.length))
+                        if (uploading.isShowing) uploading.cancel()
                     }
 
                     Status.ERROR -> {
+                        if (uploading.isShowing) uploading.cancel()
                         root.showSnack(it.message.toString())
                     }
 
                     Status.LOADING  -> {
-
+                        showProgressDialog("Loading Data...")
                     }
                 }
             }
         })
+    }
+
+    private fun setUserData(user: User?) {
+        binding.apply {
+            user?.let {
+                Glide.with(requireContext())
+                    .load(it.photo)
+                    .placeholder(R.drawable.person)
+                    .error(R.drawable.person)
+                    .into(imgProfile)
+
+                workPhotoUrl = it.workPhoto.toString()
+                aadharUrl = it.photoId.toString()
+                profileUrl = it.photo.toString()
+
+                etAadhar.isVisible = it.photoId.isNullOrEmpty()
+                relAadhar.isVisible = !it.photoId.isNullOrEmpty()
+
+                etPhotoOfWork.isVisible = it.workPhoto.isNullOrEmpty()
+                relWorkPhoto.isVisible = !it.workPhoto.isNullOrEmpty()
+
+                Glide.with(requireContext())
+                    .load(it.photoId)
+                    .into(imgAadhar)
+
+                Glide.with(requireContext())
+                    .load(it.workPhoto)
+                    .into(imgWorkPhoto)
+
+                etName.setText(it.name)
+                etWorkField.setText(it.workField)
+                etCity.setText(it.city)
+                etLocality.setText(it.locality)
+                val equipment = if (it.equipmentAvailable == true) "Yes" else "No"
+                etEquipment.setText(equipment)
+                etEducation.setText(it.education)
+                etLastWorkAt.setText(it.lastWorkAt)
+
+            }
+        }
+    }
+
+    private fun showProgressDialog(message:String) {
+        uploadingDialogBinding.tvInfo.text = message
+        uploading.show()
+        val window = uploading.window
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
     private fun updateOrRequestPermissionOrShowDialog(){
@@ -302,12 +415,6 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
         dialog.show()
 
-//        val window = dialog.window
-//        window?.setLayout(
-//            WindowManager.LayoutParams.MATCH_PARENT,
-//            WindowManager.LayoutParams.WRAP_CONTENT
-//        )
-
     }
 
     private fun uploadPhotoFromGallery() {
@@ -315,6 +422,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
     }
 
     private fun initUI() {
+
+        initUploadingDialog()
+
         binding.apply {
 
             showListPopupWindow(listOf("Yes","No"),etEquipment)
@@ -347,6 +457,16 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 updateOrRequestPermissionOrShowDialog()
             }
 
+            relAadhar.setOnClickListener {
+                currentFileName = Constants.AADHAR_NAME
+                updateOrRequestPermissionOrShowDialog()
+            }
+
+            relWorkPhoto.setOnClickListener {
+                currentFileName = Constants.WORK_PHOTO_NAME
+                updateOrRequestPermissionOrShowDialog()
+            }
+
             cardImg.setOnClickListener {
                 currentFileName = Constants.PROFILE_NAME
                 updateOrRequestPermissionOrShowDialog()
@@ -361,20 +481,34 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                             etCity.validateIsNotError("Please choose a city") &&
                             etLocality.validateIsNotError("Please enter your locality") &&
                             etLastWorkAt.validateIsNotError("Empty last work place") &&
-                            etAadhar.validateIsNotError("Aadhar card not added") &&
-                            etPhotoOfWork.validateIsNotError("Work photo not added")
+                            aadharUrl.isNotEmpty() &&
+                            workPhotoUrl.isNotEmpty()
                 ){
-                    val name = etName.text.toString()
-                    val category = etWorkField.text.toString()
-                    val city = etCity.text.toString()
-                    val locality = etLocality.text.toString()
-                    val phoneNumber = auth.currentUser?.phoneNumber
+                    val userName = etName.text.toString()
+                    val userCategory = etWorkField.text.toString()
+                    val userCity = etCity.text.toString()
+                    val userLocality = etLocality.text.toString()
+                    val userPhoneNumber = auth.currentUser?.phoneNumber
                     val equipmentInput = etEquipment.text.toString()
-                    val equipmentAvailable = equipmentInput == "Yes"
-                    val education = etEducation.text.toString()
+                    val userEquipmentAvailable = equipmentInput == "Yes"
+                    val userEducation = etEducation.text.toString()
                     val lastWorkPlace = etLastWorkAt.text.toString()
 
-                    root.showSnack("OKAY!")
+                    newUser?.apply {
+                        name = userName
+                        workField = userCategory
+                        city = userCity
+                        locality=  userLocality
+                        contactNumber = userPhoneNumber
+                        equipmentAvailable = userEquipmentAvailable
+                        education = userEducation
+                        lastWorkAt = lastWorkPlace
+                        photoId  = aadharUrl
+                        workPhoto = workPhotoUrl
+                        photo = profileUrl
+                    }
+
+                    newUser?.let { it1 -> vm.addUser(it1) }
 
                 }else{
                     return@setOnClickListener
@@ -406,6 +540,12 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
         editText.setOnClickListener {
             listPopupWindow.show()
         }
+    }
+
+    private fun initUploadingDialog(){
+        uploading = Dialog(requireContext())
+        uploadingDialogBinding = UploadingDialogBinding.inflate(requireActivity().layoutInflater)
+        uploading.setContentView(uploadingDialogBinding.root)
     }
 
     override fun onDestroy() {

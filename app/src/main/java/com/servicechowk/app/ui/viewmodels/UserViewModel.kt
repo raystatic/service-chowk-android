@@ -20,13 +20,28 @@ class UserViewModel @Inject constructor(
     private val _takePhoto = SingleLiveEvent<Boolean>()
     val takePhoto:SingleLiveEvent<Boolean> get() = _takePhoto
 
-    private val _userData = SingleLiveEvent<Resource<User>>()
-    val userData:SingleLiveEvent<Resource<User>> get() = _userData
+    private val _userData = SingleLiveEvent<Resource<com.servicechowk.app.data.model.User>>()
+    val userData:SingleLiveEvent<Resource<com.servicechowk.app.data.model.User>> get() = _userData
 
-    private val _uploadedFileUrl = SingleLiveEvent<Resource<String>>()
-    val uploadedFileUrl:SingleLiveEvent<Resource<String>> get() = _uploadedFileUrl
+    private val _uploadedFileUrl = SingleLiveEvent<Resource<Pair<String,String>>>()
+    val uploadedFileUrl:SingleLiveEvent<Resource<Pair<String,String>>> get() = _uploadedFileUrl
 
-    fun uploadFile(storageReference: StorageReference,stream:FileInputStream){
+    private val _addingUser = SingleLiveEvent<Resource<Boolean>>()
+    val addingUser:SingleLiveEvent<Resource<Boolean>> get() = _addingUser
+
+    fun addUser(user: com.servicechowk.app.data.model.User){
+        _addingUser.postValue(Resource.loading(null))
+        repository.addUser(user)
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    _addingUser.postValue(Resource.success(true))
+                }else{
+                    _addingUser.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
+                }
+            }
+    }
+
+    fun uploadFile(storageReference: StorageReference,stream:FileInputStream, currentFileName:String){
         _uploadedFileUrl.postValue(Resource.loading(null))
         try {
             val uploadTask = repository.uploadFile(storageReference,stream)
@@ -41,7 +56,7 @@ class UserViewModel @Inject constructor(
             }
             .addOnCompleteListener {
                 if (it.isSuccessful){
-                    _uploadedFileUrl.postValue(Resource.success(it.result.toString()))
+                    _uploadedFileUrl.postValue(Resource.success(Pair(it.result.toString(),currentFileName)))
                 }else{
                     _uploadedFileUrl.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
                 }
@@ -65,7 +80,7 @@ class UserViewModel @Inject constructor(
                         if (value == null || value.isEmpty){
                             _userData.postValue(Resource.success(null))
                         }else{
-                            _userData.postValue(Resource.success(value.documents[0].toObject(User::class.java)))
+                            _userData.postValue(Resource.success(value.documents[0].toObject(com.servicechowk.app.data.model.User::class.java)))
                         }
                     }else{
                         _userData.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG,null))

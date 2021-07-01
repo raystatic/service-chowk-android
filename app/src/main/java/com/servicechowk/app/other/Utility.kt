@@ -8,7 +8,6 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 import java.io.InputStream
 import kotlin.text.Charsets.UTF_8
@@ -45,21 +44,6 @@ object Utility {
 
     }
 
-
-    fun hasStoragePermissions(context: Context) =
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            EasyPermissions.hasPermissions(
-                context,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        }else{
-            EasyPermissions.hasPermissions(
-                context,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-        }
 
     fun getJson(context: Context): String? {
         var json: String? = null
