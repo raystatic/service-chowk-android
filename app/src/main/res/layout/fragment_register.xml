@@ -82,6 +82,20 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verified"
+                    android:id="@+id/tvVerified"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:textColor="@color/chateau_green"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:drawableEnd="@drawable/ic_check"
+                    android:drawablePadding="5dp"/>
+
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

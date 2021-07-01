@@ -1,5 +1,6 @@
 package com.servicechowk.app.ui.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.StorageReference
@@ -19,6 +20,9 @@ class UserViewModel @Inject constructor(
 
     private val _takePhoto = SingleLiveEvent<Boolean>()
     val takePhoto:SingleLiveEvent<Boolean> get() = _takePhoto
+
+    private val _openGallery = SingleLiveEvent<Boolean>()
+    val openGallery:SingleLiveEvent<Boolean> get() = _openGallery
 
     private val _userData = SingleLiveEvent<Resource<com.servicechowk.app.data.model.User>>()
     val userData:SingleLiveEvent<Resource<com.servicechowk.app.data.model.User>> get() = _userData
@@ -40,6 +44,33 @@ class UserViewModel @Inject constructor(
                 }
             }
     }
+
+    fun uploadFileByUri(storageReference: StorageReference,uri:Uri, currentFileName:String){
+        _uploadedFileUrl.postValue(Resource.loading(null))
+        try {
+            val uploadTask = repository.uploadFileByUri(storageReference,uri)
+
+            val urlTask = uploadTask.continueWithTask {
+                if (!it.isSuccessful){
+                    it.exception?.let {
+                        throw  it
+                    }
+                }
+                storageReference.downloadUrl
+            }
+                    .addOnCompleteListener {
+                        if (it.isSuccessful){
+                            _uploadedFileUrl.postValue(Resource.success(Pair(it.result.toString(),currentFileName)))
+                        }else{
+                            _uploadedFileUrl.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
+                        }
+                    }
+        }catch (e:Exception){
+            e.printStackTrace()
+            _uploadedFileUrl.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG,null))
+        }
+    }
+
 
     fun uploadFile(storageReference: StorageReference,stream:FileInputStream, currentFileName:String){
         _uploadedFileUrl.postValue(Resource.loading(null))
@@ -69,6 +100,10 @@ class UserViewModel @Inject constructor(
 
     fun setTakePhoto(b:Boolean){
         _takePhoto.postValue(b)
+    }
+
+    fun setOpenGallery(b:Boolean){
+        _openGallery.postValue(b)
     }
 
     fun getUserData(userId:String){

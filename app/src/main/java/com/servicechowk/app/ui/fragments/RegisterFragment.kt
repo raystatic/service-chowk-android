@@ -7,6 +7,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -88,6 +89,11 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val currentRef = storage.reference.child("images/${auth.currentUser?.phoneNumber}")
+
+        val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { vm.uploadFileByUri(currentRef.child(currentFileName), it,currentFileName) }
+        }
+
         val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicturePreview()){
             if (writePermissionGranted){
                 val saved = savePhotoToInternalStorage(bmp = it)
@@ -125,7 +131,16 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
             }
         })
 
+        vm.openGallery.observe(requireActivity(),{
+            it?.let {
+                if (it){
+                    getContent.launch("image/*")
+                }
+            }
+        })
+
         vm.setTakePhoto(false)
+        vm.setOpenGallery(false)
 
     }
 
@@ -266,7 +281,8 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         println("USERDEBUG: $data")
                         setUserData(data)
                         newUser = User(
-                            id = auth.currentUser?.uid.toString()
+                            id = auth.currentUser?.uid.toString(),
+                                isVerified = data?.isVerified
                         )
                         val phone = auth.currentUser?.phoneNumber
                         etPhone.setText(phone?.substring(range = 3 until phone.length))
@@ -294,6 +310,8 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     .placeholder(R.drawable.person)
                     .error(R.drawable.person)
                     .into(imgProfile)
+
+                tvVerified.isVisible = it.isVerified == true
 
                 workPhotoUrl = it.workPhoto.toString()
                 aadharUrl = it.photoId.toString()
@@ -421,6 +439,13 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     private fun uploadPhotoFromGallery() {
 
+        vm.setOpenGallery(true)
+
+//        val intent = Intent()
+//        intent.type = "image/*"
+//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+//        intent.action = Intent.ACTION_GET_CONTENT
+//        requireActivity().startActivityForResult(Intent.createChooser(intent, "Select Picture"), 101)
     }
 
     private fun initUI() {

@@ -1,5 +1,6 @@
 package com.servicechowk.app.data.repositories
 
+import android.net.Uri
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -25,6 +26,10 @@ class UserRepository @Inject constructor(
 
     fun uploadFile(imagesStorageReference: StorageReference, stream:FileInputStream): UploadTask {
         return imagesStorageReference.putStream(stream)
+    }
+
+    fun uploadFileByUri(imagesStorageReference: StorageReference,file:Uri):UploadTask{
+        return imagesStorageReference.putFile(file)
     }
 
 
