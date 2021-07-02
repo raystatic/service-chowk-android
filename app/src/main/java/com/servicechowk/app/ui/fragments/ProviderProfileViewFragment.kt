@@ -105,6 +105,7 @@ class ProviderProfileViewFragment: Fragment(R.layout.fragment_provider_profile_v
         uploading = Dialog(requireContext())
         uploadingDialogBinding = UploadingDialogBinding.inflate(requireActivity().layoutInflater)
         uploading.setContentView(uploadingDialogBinding.root)
+        uploading.setCancelable(false)
     }
 
     private fun showProgressDialog(message:String) {

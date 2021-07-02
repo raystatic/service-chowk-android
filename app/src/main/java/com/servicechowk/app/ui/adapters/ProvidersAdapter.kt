@@ -29,7 +29,7 @@ class ProvidersAdapter(
 
     private val TAG = "GLIDEDEBUG"
 
-    inner class ProvidersViewHolder(val binding:ItemProviderAdapterBinding):RecyclerView.ViewHolder(binding.root){
+    inner class ProvidersViewHolder(val binding: ItemProviderAdapterBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(user: User){
             binding.apply {
 

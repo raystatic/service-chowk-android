@@ -583,6 +583,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
         uploading = Dialog(requireContext())
         uploadingDialogBinding = UploadingDialogBinding.inflate(requireActivity().layoutInflater)
         uploading.setContentView(uploadingDialogBinding.root)
+        uploading.setCancelable(false)
     }
 
     override fun onDestroy() {
