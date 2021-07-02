@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.servicechowk.app.R
+import com.servicechowk.app.data.model.User
 import com.servicechowk.app.databinding.FragmentChatRoomBinding
 import com.servicechowk.app.other.Extensions.showSnack
 import com.servicechowk.app.other.Status
@@ -29,19 +30,24 @@ class ChatRoomFragment: Fragment(R.layout.fragment_chat_room) {
 
     private lateinit var chatRoomAdapter: ChatRoomAdapter
 
+    private var providerFCMToken  = ""
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChatRoomBinding.bind(view)
 
         providerId = arguments?.getString("providerId") ?: ""
+        providerFCMToken = arguments?.getString("providerFCMToken") ?: ""
 
-        if (providerId.isEmpty()) findNavController().navigateUp()
+
+        if (providerId.isEmpty() || providerFCMToken.isEmpty()) findNavController().navigateUp()
 
         chatRoomAdapter = ChatRoomAdapter {
             val bundle = bundleOf(
                 "consumerId" to it.consumerId,
                 "providerId" to it.providerId,
-                "isConsumer" to false
+                "isConsumer" to false,
+                "providerFCMToken" to providerFCMToken
             )
             findNavController().navigate(R.id.action_chatRoomFragment_to_chatFragment,bundle)
         }

@@ -1,13 +1,16 @@
 package com.servicechowk.app.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.servicechowk.app.data.model.Chat
+import com.servicechowk.app.data.model.ChatNotificationRequest
 import com.servicechowk.app.data.model.ChatRoom
 import com.servicechowk.app.data.repositories.ChatRepository
 import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Resource
 import com.servicechowk.app.other.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

@@ -46,7 +46,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                     "isConsumer" to true,
                     "providerId" to it.id,
                     "consumerId" to Utility.getDeviceId(requireContext()),
-                    "user" to it
+                    "providerFCMToken" to it.fcmToken
                 )
                 findNavController().navigate(R.id.action_homeFragment_to_chatFragment,bundle)
             },

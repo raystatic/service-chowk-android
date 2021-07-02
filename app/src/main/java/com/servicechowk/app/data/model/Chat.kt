@@ -7,5 +7,7 @@ data class Chat(
     val senderId:String?="",
     val sentByCustomer:Boolean?=false,
     val providerId:String?="",
-    val consumerId:String?=""
+    val consumerId:String?="",
+    val consumerFCMTOKEN:String?="",
+    val providerFCMTOKEN:String?=""
 )

@@ -38,6 +38,7 @@ import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Extensions.showSnack
 import com.servicechowk.app.other.Extensions.showToast
 import com.servicechowk.app.other.Extensions.validateIsNotError
+import com.servicechowk.app.other.PrefManager
 import com.servicechowk.app.other.Status
 import com.servicechowk.app.other.Utility
 import com.servicechowk.app.ui.MainActivity
@@ -73,6 +74,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     @Inject
     lateinit var storage:FirebaseStorage
+
+    @Inject
+    lateinit var prefManager: PrefManager
 
     private var readPermissionGranted = false
     private var writePermissionGranted = false
@@ -283,7 +287,8 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         setUserData(data)
                         newUser = User(
                             id = auth.currentUser?.uid.toString(),
-                                isVerified = data?.isVerified
+                            isVerified = data?.isVerified ?: false,
+                            fcmToken = prefManager.getString(Constants.FCM_TOKEN)
                         )
                         val phone = auth.currentUser?.phoneNumber
                         etPhone.setText(phone?.substring(range = 3 until phone.length))
@@ -305,44 +310,52 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     private fun setUserData(user: User?) {
         binding.apply {
-            user?.let {
+            user?.let { user1 ->
 
                 btnChatRoom.isVisible = true
 
+                btnChatRoom.setOnClickListener {
+                    val bundle = bundleOf(
+                        "providerId" to auth.currentUser?.uid,
+                        "providerFCMToken" to user1.fcmToken
+                    )
+                    findNavController().navigate(R.id.action_registerFragment_to_chatRoomFragment,bundle)
+                }
+
                 Glide.with(requireContext())
-                    .load(it.photo)
+                    .load(user1.photo)
                     .placeholder(R.drawable.person)
                     .error(R.drawable.person)
                     .into(imgProfile)
 
-                tvVerified.isVisible = it.isVerified == true
+                tvVerified.isVisible = user1.isVerified == true
 
-                workPhotoUrl = it.workPhoto.toString()
-                aadharUrl = it.photoId.toString()
-                profileUrl = it.photo.toString()
+                workPhotoUrl = user1.workPhoto.toString()
+                aadharUrl = user1.photoId.toString()
+                profileUrl = user1.photo.toString()
 
-                etAadhar.isVisible = it.photoId.isNullOrEmpty()
-                relAadhar.isVisible = !it.photoId.isNullOrEmpty()
+                etAadhar.isVisible = user1.photoId.isNullOrEmpty()
+                relAadhar.isVisible = !user1.photoId.isNullOrEmpty()
 
-                etPhotoOfWork.isVisible = it.workPhoto.isNullOrEmpty()
-                relWorkPhoto.isVisible = !it.workPhoto.isNullOrEmpty()
+                etPhotoOfWork.isVisible = user1.workPhoto.isNullOrEmpty()
+                relWorkPhoto.isVisible = !user1.workPhoto.isNullOrEmpty()
 
                 Glide.with(requireContext())
-                    .load(it.photoId)
+                    .load(user1.photoId)
                     .into(imgAadhar)
 
                 Glide.with(requireContext())
-                    .load(it.workPhoto)
+                    .load(user1.workPhoto)
                     .into(imgWorkPhoto)
 
-                etName.setText(it.name)
-                etWorkField.setText(it.workField)
-                etCity.setText(it.city)
-                etLocality.setText(it.locality)
-                val equipment = if (it.equipmentAvailable == true) "Yes" else "No"
+                etName.setText(user1.name)
+                etWorkField.setText(user1.workField)
+                etCity.setText(user1.city)
+                etLocality.setText(user1.locality)
+                val equipment = if (user1.equipmentAvailable == true) "Yes" else "No"
                 etEquipment.setText(equipment)
-                etEducation.setText(it.education)
-                etLastWorkAt.setText(it.lastWorkAt)
+                etEducation.setText(user1.education)
+                etLastWorkAt.setText(user1.lastWorkAt)
 
             }
         }
@@ -554,13 +567,6 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 auth.signOut()
                 startActivity(Intent(requireActivity(),MainActivity::class.java))
                 requireActivity().finish()
-            }
-
-            btnChatRoom.setOnClickListener {
-                val bundle = bundleOf(
-                    "providerId" to auth.currentUser?.uid
-                )
-                findNavController().navigate(R.id.action_registerFragment_to_chatRoomFragment,bundle)
             }
 
         }

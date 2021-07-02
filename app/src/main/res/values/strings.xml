@@ -9,6 +9,7 @@
     <string name="empty_phone">Phone number cannot be empty</string>
     <string name="invalid_phone">Invalid Phone number</string>
     <string name="please_try_again">Something went wrong.. Please try again</string>
+    <string name="default_notification_channel_id">service_chowk_notification_channel_987654321</string>
 
 
 </resources>

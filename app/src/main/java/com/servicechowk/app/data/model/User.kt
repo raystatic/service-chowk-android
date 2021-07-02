@@ -18,7 +18,8 @@ data class User(
     var photoId:String?="",
     var photo:String?="",
     var workPhoto:String?="",
-    var isVerified:Boolean?=false
+    var isVerified:Boolean?=false,
+    var fcmToken:String?=""
 ):Parcelable{
     constructor():this("")
 }
