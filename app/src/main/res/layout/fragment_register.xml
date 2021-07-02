@@ -70,8 +70,7 @@
                     android:src="@drawable/person"
                     android:id="@+id/imgProfile"
                     android:scaleType="centerCrop"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@color/white"/>
+                    android:layout_gravity="center_horizontal"/>
 
                 <TextView
                     android:layout_width="wrap_content"
