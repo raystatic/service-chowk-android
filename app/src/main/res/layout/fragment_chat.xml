@@ -92,15 +92,23 @@
                 android:layout_toStartOf="@+id/imgSend"
                 android:layout_marginBottom="10dp"/>
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:layout_width="58dp"
-                android:layout_height="58dp"
+            <RelativeLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/imgSend"
-                app:icon="@drawable/ic_send"
-                app:backgroundTint="@color/chateau_green"
-                app:iconTint="@color/white"
+                android:background="@drawable/cicle_bg"
+                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:layout_gravity="center_horizontal"/>
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_send"/>
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
