@@ -494,7 +494,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 updateOrRequestPermissionOrShowDialog()
             }
 
-            cardImg.setOnClickListener {
+            imgProfile.setOnClickListener {
                 currentFileName = Constants.PROFILE_NAME
                 updateOrRequestPermissionOrShowDialog()
             }

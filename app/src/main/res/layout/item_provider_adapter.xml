@@ -15,29 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.cardview.widget.CardView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            app:cardCornerRadius="360dp"
-            app:cardElevation="0dp"
-            android:layout_centerVertical="true"
-            android:id="@+id/cardImg">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/person"
-                android:scaleType="centerCrop"
-                android:id="@+id/imgProfile"/>
-
-        </androidx.cardview.widget.CardView>
+            android:scaleType="centerCrop"
+            android:id="@+id/imgProfile"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rahul Ray"
             android:textColor="@color/black"
-            android:layout_toEndOf="@+id/cardImg"
+            android:layout_toEndOf="@+id/imgProfile"
             android:layout_marginStart="10dp"
             android:id="@+id/tvName"
             android:layout_centerVertical="true"/>
