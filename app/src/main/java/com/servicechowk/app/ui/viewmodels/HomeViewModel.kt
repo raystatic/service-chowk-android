@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
                     if (value!=null && !value.isEmpty){
                         for (i in value.documents){
                             val user = i.toObject(User::class.java)
-                            println("USERREMOTE: ${user}")
+                            println("USERREMOTE: ${i}")
 
                             user?.let { it1 -> users.add(it1) }
                         }

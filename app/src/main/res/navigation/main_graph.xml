@@ -48,5 +48,9 @@
     <fragment
         android:id="@+id/chatRoomFragment"
         android:name="com.servicechowk.app.ui.fragments.ChatRoomFragment"
-        android:label="ChatRoomFragment" />
+        android:label="ChatRoomFragment" >
+        <action
+            android:id="@+id/action_chatRoomFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
 </navigation>

@@ -50,7 +50,7 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
         isConsumer = arguments?.getBoolean("isConsumer") ?: false
         provider = arguments?.getParcelable("user")
 
-        if (consumerId.isEmpty() || providerId.isEmpty() || provider == null) findNavController().navigateUp()
+        if (consumerId.isEmpty() || providerId.isEmpty()) findNavController().navigateUp()
 
         myId = if (isConsumer) consumerId else providerId
 

@@ -2,6 +2,7 @@ package com.servicechowk.app.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,7 +38,12 @@ class ChatRoomFragment: Fragment(R.layout.fragment_chat_room) {
         if (providerId.isEmpty()) findNavController().navigateUp()
 
         chatRoomAdapter = ChatRoomAdapter {
-
+            val bundle = bundleOf(
+                "consumerId" to it.consumerId,
+                "providerId" to it.providerId,
+                "isConsumer" to false
+            )
+            findNavController().navigate(R.id.action_chatRoomFragment_to_chatFragment,bundle)
         }
 
         initUI()
