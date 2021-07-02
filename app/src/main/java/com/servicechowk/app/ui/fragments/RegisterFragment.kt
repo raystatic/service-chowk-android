@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -305,6 +306,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
     private fun setUserData(user: User?) {
         binding.apply {
             user?.let {
+
+                btnChatRoom.isVisible = true
+
                 Glide.with(requireContext())
                     .load(it.photo)
                     .placeholder(R.drawable.person)
@@ -550,6 +554,13 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 auth.signOut()
                 startActivity(Intent(requireActivity(),MainActivity::class.java))
                 requireActivity().finish()
+            }
+
+            btnChatRoom.setOnClickListener {
+                val bundle = bundleOf(
+                    "providerId" to auth.currentUser?.uid
+                )
+                findNavController().navigate(R.id.action_registerFragment_to_chatRoomFragment,bundle)
             }
 
         }

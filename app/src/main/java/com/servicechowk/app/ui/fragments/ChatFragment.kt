@@ -91,7 +91,6 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
                 when(it.status){
                     Status.SUCCESS -> {
                         val chats = it.data
-                        println("CHATDEBUG: $chats")
                         if (!chats.isNullOrEmpty()){
                             rvChat.isVisible =  true
                             chatAdapter.submitData(chats)
@@ -132,7 +131,9 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
                         text = message,
                         createdAt = Utility.getCurrentTime(),
                         senderId = senderId,
-                        sentByCustomer = isConsumer
+                        sentByCustomer = isConsumer,
+                        providerId = providerId,
+                        consumerId = consumerId
                     )
                     vm.addChat(chat, consumerId, providerId)
                 }

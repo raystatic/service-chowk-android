@@ -32,7 +32,11 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.servicechowk.app.ui.fragments.RegisterFragment"
-        android:label="RegisterFragment" />
+        android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_registerFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment" />
+    </fragment>
     <fragment
         android:id="@+id/providerProfileViewFragment"
         android:name="com.servicechowk.app.ui.fragments.ProviderProfileViewFragment"
@@ -41,4 +45,8 @@
         android:id="@+id/chatFragment"
         android:name="com.servicechowk.app.ui.fragments.ChatFragment"
         android:label="ChatFragment" />
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.servicechowk.app.ui.fragments.ChatRoomFragment"
+        android:label="ChatRoomFragment" />
 </navigation>
