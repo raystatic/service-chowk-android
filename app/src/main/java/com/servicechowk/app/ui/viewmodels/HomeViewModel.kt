@@ -25,8 +25,6 @@ class HomeViewModel @Inject constructor(
                     val users = mutableListOf<User>()
                     if (value!=null && !value.isEmpty){
                         for (i in value.documents){
-
-
                             val user = i.toObject(User::class.java)
                             println("USERREMOTE: ${user}")
 

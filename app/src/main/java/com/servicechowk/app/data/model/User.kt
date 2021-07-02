@@ -1,5 +1,9 @@
 package com.servicechowk.app.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class User(
     val id:String,
     var name:String? = "",
@@ -15,6 +19,6 @@ data class User(
     var photo:String?="",
     var workPhoto:String?="",
     var isVerified:Boolean?=false
-){
+):Parcelable{
     constructor():this("")
 }

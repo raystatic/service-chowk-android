@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/athens_gray">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp"
+        android:id="@+id/cardTopBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/athens_gray"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:id="@+id/imgBack"
+                android:padding="10dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rahul Ray"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/imgBack"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"/>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/chateau_green"
+            android:indeterminate="true"
+            android:id="@+id/progressbar"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvChat"
+            tools:listitem="@layout/item_chat"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_above="@+id/relChatInput"
+            android:layout_marginBottom="10dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/relChatInput"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etChat"
+                android:background="@drawable/et_bg"
+                android:layout_centerVertical="true"
+                android:padding="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Type message.."
+                android:textColorHint="@color/gray"
+                android:textSize="14sp"
+                android:layout_toStartOf="@+id/imgSend"
+                android:layout_marginBottom="10dp"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:id="@+id/imgSend"
+                app:icon="@drawable/ic_send"
+                app:backgroundTint="@color/chateau_green"
+                app:iconTint="@color/white"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

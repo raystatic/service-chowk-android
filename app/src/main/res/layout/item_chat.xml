@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/other_chat_bg"
+        android:layout_marginEnd="150dp"
+        android:minWidth="200dp"
+        android:padding="10dp"
+        android:id="@+id/relProviderMessage"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Service Provider"
+            android:id="@+id/tvProviderTitle"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hi, how are you doing bro. Is everything ok on your end?"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_below="@+id/tvProviderTitle"
+            android:id="@+id/tvOtherMessage"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvOtherMessage"
+            android:text="2PM 20 Jun 2021"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tvOtherTime"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/my_chat_bg"
+        android:layout_marginStart="150dp"
+        android:minWidth="200dp"
+        android:padding="10dp"
+        android:layout_below="@+id/relProviderMessage"
+        android:id="@+id/relCustomerMessage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Customer"
+            android:id="@+id/tvCustomerTitle"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_below="@+id/tvCustomerTitle"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hi, how are you doing bro. Is everything ok on your end?"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:id="@+id/tvMyMessage"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvMyMessage"
+            android:text="2PM 20 Jun 2021"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/tvMyTime"/>
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

@@ -6,13 +6,46 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import java.io.IOException
 import java.io.InputStream
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.text.Charsets.UTF_8
 
 object Utility {
+
+    fun formatDate(date: String): String {
+        val sdf = SimpleDateFormat("hh:mm aaa, dd MMM yyyy", Locale.ENGLISH)
+        val d = getDate(date)
+        sdf.timeZone =  TimeZone.getDefault()
+        return sdf.format(d)
+    }
+
+    fun getDate(d: String):Date{
+        val sdf = DateFormat.getDateTimeInstance(
+            DateFormat.FULL,
+            DateFormat.FULL
+        ) as SimpleDateFormat
+        sdf.applyPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        return sdf.parse(d)
+    }
+
+    fun getCurrentTime():String{
+        val tz = TimeZone.getTimeZone("UTC")
+        val  df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()) // Quoted "Z" to indicate UTC, no timezone offset
+        df.timeZone = tz
+        return df.format(Date())
+    }
+
+    fun getDeviceId(context: Context):String{
+        return Settings.Secure.getString(context.contentResolver,
+            Settings.Secure.ANDROID_ID)
+    }
 
     private fun savePhotoToExternalStorage(activity: AppCompatActivity, dislayName:String, bmp: Bitmap):String?{
         val imageCollection = sdk29AndUp {

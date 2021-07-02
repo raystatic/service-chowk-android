@@ -15,6 +15,7 @@ import com.servicechowk.app.R
 import com.servicechowk.app.databinding.FragmentHomeBinding
 import com.servicechowk.app.other.Extensions.showSnack
 import com.servicechowk.app.other.Status
+import com.servicechowk.app.other.Utility
 import com.servicechowk.app.ui.adapters.ProvidersAdapter
 import com.servicechowk.app.ui.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +42,13 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         providersAdapter = ProvidersAdapter(
             onStartChat = {
-
+                val bundle = bundleOf(
+                    "isConsumer" to true,
+                    "providerId" to it.id,
+                    "consumerId" to Utility.getDeviceId(requireContext()),
+                    "user" to it
+                )
+                findNavController().navigate(R.id.action_homeFragment_to_chatFragment,bundle)
             },
             onViewProfile = {
                 val bundle = bundleOf(
