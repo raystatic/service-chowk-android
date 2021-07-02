@@ -23,8 +23,10 @@ import com.servicechowk.app.other.MyGlideApp
 import com.squareup.picasso.Picasso
 
 class ProvidersAdapter(
+    private val currentUserId:String?,
     private val onStartChat:(User) -> Unit,
-    private val onViewProfile:(User) -> Unit
+    private val onViewProfile:(User) -> Unit,
+    private val openMyProfile:() -> Unit
 ): RecyclerView.Adapter<ProvidersAdapter.ProvidersViewHolder>() {
 
     private val TAG = "GLIDEDEBUG"
@@ -33,20 +35,11 @@ class ProvidersAdapter(
         fun bind(user: User){
             binding.apply {
 
-                val url = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
                 Glide.with(itemView)
                         .load(user.photo)
                         .placeholder(R.drawable.person)
                         .error(R.drawable.person)
                         .into(imgProfile)
-
-
-//                Picasso.get()
-//                        .load("https://firebasestorage.googleapis.com/v0/b/service-chowk.appspot.com/o/images%2F%2B918810319452%2Faadhar.jpg?alt=media&token=a58daf65-274e-4f46-80a0-a945cb235134")
-//                        .placeholder(R.drawable.person)
-//                        .error(R.drawable.ic_launcher_background)
-//                        .into(imgProfile)
-
 
                 tvName.text = user.name
                 tvVerified.isVisible = user.isVerified == true
@@ -54,8 +47,21 @@ class ProvidersAdapter(
                 val location = "${user.locality}, ${user.city}"
                 tvLocation.text = location
 
+                if (user.id == currentUserId){
+                    btnChat.text = "My Profile"
+                    btnViewProfile.isVisible = false
+                }else{
+                    btnChat.text = "Start Chat"
+                    btnViewProfile.isVisible = true
+                }
+
                 btnChat.setOnClickListener {
-                    onStartChat(user)
+                    if (btnChat.text == "My Profile"){
+                        openMyProfile()
+                    }else{
+                        onStartChat(user)
+                    }
+
                 }
 
                 btnViewProfile.setOnClickListener {

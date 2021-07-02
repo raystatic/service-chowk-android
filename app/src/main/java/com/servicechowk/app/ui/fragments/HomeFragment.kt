@@ -41,6 +41,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val user = auth.currentUser
 
         providersAdapter = ProvidersAdapter(
+            currentUserId = user?.uid,
             onStartChat = {
                 val bundle = bundleOf(
                     "isConsumer" to true,
@@ -55,6 +56,10 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                         "userId" to it.id
                 )
                 findNavController().navigate(R.id.action_homeFragment_to_providerProfileViewFragment,bundle)
+            },
+            openMyProfile = {
+                if (user == null) findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
             }
         )
 
