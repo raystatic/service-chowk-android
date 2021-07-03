@@ -211,17 +211,32 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             isModal=  true
 
             setOnItemClickListener { parent, view, position, id ->
-                textView.text = list[position]
                 val currentFilter = vm.getCurrentFilter()
-                when(filterType){
-                    1 -> {
-                        currentFilter?.field = list[position]
+                if (position == 0){
+                    textView.hint = "Select"
+                    textView.text = ""
+
+                    when(filterType){
+                        1 -> {
+                            currentFilter?.field = null
+                        }
+                        2-> {
+                            currentFilter?.city = null
+                        }
                     }
-                    2-> {
-                        currentFilter?.city = list[position]
+                    currentFilter?.let { vm.setHomeFilter(it) }
+                }else{
+                    textView.text = list[position]
+                    when(filterType){
+                        1 -> {
+                            currentFilter?.field = list[position]
+                        }
+                        2-> {
+                            currentFilter?.city = list[position]
+                        }
                     }
+                    currentFilter?.let { vm.setHomeFilter(it) }
                 }
-                currentFilter?.let { vm.setHomeFilter(it) }
                 dismiss()
             }
         }
