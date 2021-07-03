@@ -129,6 +129,10 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
                 adapter = chatAdapter
             }
 
+            imgBack.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
             imgSend.setOnClickListener {
                 val message = etChat.text.toString()
                 if (message.isNotEmpty()){

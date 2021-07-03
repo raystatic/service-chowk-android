@@ -91,6 +91,10 @@ class ChatRoomFragment: Fragment(R.layout.fragment_chat_room) {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = chatRoomAdapter
             }
+
+            imgBack.setOnClickListener {
+                findNavController().navigateUp()
+            }
         }
 
     }

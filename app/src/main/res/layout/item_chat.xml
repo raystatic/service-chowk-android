@@ -9,10 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/other_chat_bg"
-        android:minWidth="200dp"
-        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginEnd="60dp"
         android:id="@+id/relProviderMessage"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,7 +26,7 @@
             android:textColor="@color/white"/>
 
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hi, how are you doing bro. Is everything ok on your end?"
@@ -40,7 +43,8 @@
             android:text="2PM 20 Jun 2021"
             android:textColor="@color/white"
             android:textSize="10sp"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
             android:id="@+id/tvOtherTime"/>
 
     </RelativeLayout>
@@ -49,11 +53,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/my_chat_bg"
-        android:minWidth="200dp"
-        android:padding="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_marginStart="60dp"
         android:layout_below="@+id/relProviderMessage"
         android:id="@+id/relCustomerMessage"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,7 +72,7 @@
 
         <TextView
             android:layout_below="@+id/tvCustomerTitle"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hi, how are you doing bro. Is everything ok on your end?"
@@ -81,7 +88,8 @@
             android:text="2PM 20 Jun 2021"
             android:textColor="@color/white"
             android:textSize="10sp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentEnd="true"
             android:id="@+id/tvMyTime"/>
 
     </RelativeLayout>
