@@ -14,6 +14,12 @@ class UserRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 
+    fun addLocality(locality:String, userId: String): Task<Void> {
+        return firestore.collection("localities")
+                .document(userId)
+                .set(Pair("locality",locality))
+    }
+
     fun addUser(user: User): Task<Void> {
         return firestore.collection("users")
             .document(user.id)

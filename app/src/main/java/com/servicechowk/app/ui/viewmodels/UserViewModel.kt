@@ -33,12 +33,14 @@ class UserViewModel @Inject constructor(
     private val _addingUser = SingleLiveEvent<Resource<Boolean>>()
     val addingUser:SingleLiveEvent<Resource<Boolean>> get() = _addingUser
 
+
     fun addUser(user: com.servicechowk.app.data.model.User){
         _addingUser.postValue(Resource.loading(null))
         repository.addUser(user)
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _addingUser.postValue(Resource.success(true))
+                    repository.addLocality(user.locality.toString(),user.id)
                 }else{
                     _addingUser.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
                 }
