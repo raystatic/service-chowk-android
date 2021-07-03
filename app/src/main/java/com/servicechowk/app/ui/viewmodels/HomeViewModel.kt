@@ -59,8 +59,11 @@ class HomeViewModel @Inject constructor(
 
     fun getLocalities(){
         _localities.postValue(Resource.loading(null))
+        println("LOCALITYDEBUG: a")
         repository.getLocalities().also {
             it.addSnapshotListener { value, error ->
+                println("LOCALITYDEBUG: b $value $error")
+
                 if (error == null){
                     val localities = mutableListOf<ProviderLocality>()
                     if (value!=null && !value.isEmpty){

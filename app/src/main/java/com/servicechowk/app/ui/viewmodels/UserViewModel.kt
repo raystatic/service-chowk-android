@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.StorageReference
+import com.servicechowk.app.data.model.ProviderLocality
 import com.servicechowk.app.data.repositories.UserRepository
 import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Resource
@@ -40,7 +41,7 @@ class UserViewModel @Inject constructor(
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _addingUser.postValue(Resource.success(true))
-                    repository.addLocality(user.locality.toString(),user.id)
+                    repository.addLocality(ProviderLocality("locality",user.locality.toString()),user.id)
                 }else{
                     _addingUser.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
                 }

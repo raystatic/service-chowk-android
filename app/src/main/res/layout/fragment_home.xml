@@ -120,48 +120,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/relLocality">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Your locality"
-                android:textColor="@color/black"
-                android:id="@+id/tvLocalityTitle"
-                android:textSize="12sp"
-                android:layout_marginTop="10dp"/>
 
-
-            <EditText
-                android:textSize="12sp"
-                android:id="@+id/etLocality"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="60dp"
-                android:layout_toEndOf="@+id/tvLocalityTitle"
-                android:padding="10dp"
-                android:gravity="start"
-                android:hint="Type here..."
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/ic_search"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvLocalityTitle"
-                android:layout_alignEnd="@+id/etLocality"
-                android:layout_below="@+id/etLocality"
-                android:id="@+id/rvLocalityFilter"
-                android:visibility="gone"
-                tools:listitem="@layout/item_locality_search"/>
 
         </RelativeLayout>
 
 
     </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:overScrollMode="never"
@@ -170,7 +135,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/rvProviders"
         android:visibility="visible"
-        android:layout_below="@+id/relFilter"
+        android:layout_below="@+id/tvLocalityTitle"
         tools:listitem="@layout/item_provider_adapter"
         />
 
@@ -191,6 +156,62 @@
         android:indeterminateTint="@color/chateau_green"
         android:id="@+id/progressbar"
         android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your locality"
+        android:textColor="@color/black"
+        android:id="@+id/tvLocalityTitle"
+        android:textSize="12sp"
+        android:layout_marginStart="16dp"
+        android:layout_below="@id/relFilter"
+        android:layout_marginTop="10dp"/>
+
+
+    <EditText
+        android:textSize="12sp"
+        android:id="@+id/etLocality"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="60dp"
+        android:layout_toEndOf="@+id/tvLocalityTitle"
+        android:padding="10dp"
+        android:gravity="start"
+        android:hint="Type here..."
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_search"
+        android:textColor="@color/black"
+        android:layout_below="@+id/relFilter"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:textColorHint="@color/gray"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/tvLocalityTitle"
+        android:layout_alignEnd="@+id/etLocality"
+        android:layout_below="@+id/etLocality">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:id="@+id/rvLocalityFilter"
+                android:visibility="visible"
+                tools:listitem="@layout/item_locality_search"/>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>

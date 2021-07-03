@@ -3,6 +3,7 @@ package com.servicechowk.app.ui.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.os.bundleOf
@@ -31,7 +32,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment: Fragment(R.layout.fragment_home) {
 
-    private var _binding:FragmentHomeBinding?=null
+    private var _binding: FragmentHomeBinding?=null
     private val binding:FragmentHomeBinding get() = _binding!!
 
     private val vm by viewModels<HomeViewModel>()
@@ -98,7 +99,11 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             binding.apply {
                 when(it.status){
                     Status.SUCCESS ->{
-
+                        it.data?.let {
+                            println("LOCALITYDEBUG: $it")
+                           // showListPopupWindowForLocality(it.map { it.value },etLocality)
+                            providerLocalityFilterAdapter.submitData(it)
+                        }
                     }
                     Status.ERROR -> {
 
@@ -183,6 +188,12 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             etLocality.doAfterTextChanged {
                 val text = it.toString()
                 rvLocalityFilter.isVisible =text.isNotEmpty()
+
+                if(text.isEmpty()){
+                    val currentFilter = vm.getCurrentFilter()
+                    currentFilter?.locality=  null
+                    currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
+                }
             }
 
             rvLocalityFilter.isVisible = false
@@ -196,6 +207,34 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         }
 
     }
+
+    private fun showListPopupWindowForLocality(list:List<String>, editText: EditText){
+        val listPopupWindow = ListPopupWindow(requireContext())
+        listPopupWindow.apply {
+            setAdapter(
+                    ArrayAdapter(
+                            requireContext(),
+                            R.layout.item_request_category,
+                            list
+                    )
+            )
+            anchorView = editText
+            isModal=  true
+
+            setOnItemClickListener { parent, view, position, id ->
+                val currentFilter = vm.getCurrentFilter()
+                editText.setText(list[position])
+                currentFilter?.locality = list[position]
+                currentFilter?.let { vm.setHomeFilter(it) }
+                dismiss()
+            }
+        }
+
+        editText.setOnClickListener {
+            listPopupWindow.show()
+        }
+    }
+
 
     private fun showListPopupWindow(list:List<String>, textView: TextView, filterType:Int){
         val listPopupWindow = ListPopupWindow(requireContext())
