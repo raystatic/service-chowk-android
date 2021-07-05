@@ -15,6 +15,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -22,6 +23,7 @@ import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -90,6 +92,8 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
     private var profileUrl = ""
     private var aadharUrl = ""
     private var workPhotoUrl = ""
+
+    private var changesMade = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -211,6 +215,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         }else{
                             root.showSnack(Constants.SOMETHING_WENT_WRONG)
                         }
+                       changesMade = false
                        if (uploading.isShowing) uploading.cancel()
                    }
 
@@ -233,6 +238,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         it.data?.let {
                             when(it.second){
                                 Constants.AADHAR_NAME -> {
+                                    changesMade = aadharUrl != it.first
                                     etAadhar.isVisible = false
                                     relAadhar.isVisible = true
                                     aadharUrl = it.first
@@ -241,6 +247,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                                         .into(imgAadhar)
                                 }
                                 Constants.WORK_PHOTO_NAME -> {
+                                    changesMade = workPhotoUrl != it.first
                                     etPhotoOfWork.isVisible = false
                                     relWorkPhoto.isVisible = true
                                     workPhotoUrl = it.first
@@ -249,6 +256,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                                         .into(imgWorkPhoto)
                                 }
                                 Constants.PROFILE_NAME -> {
+                                    changesMade = profileUrl != it.first
                                     profileUrl = it.first
                                     Glide.with(requireContext())
                                         .load(profileUrl)
@@ -293,6 +301,8 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         val phone = auth.currentUser?.phoneNumber
                         etPhone.setText(phone?.substring(range = 3 until phone.length))
                         if (uploading.isShowing) uploading.cancel()
+                        changesMade = false
+                        onbserveDataForChanges(data)
                     }
 
                     Status.ERROR -> {
@@ -306,6 +316,39 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 }
             }
         })
+    }
+
+    private fun onbserveDataForChanges(user: User?) {
+        binding.apply {
+            etName.doAfterTextChanged {
+                changesMade = user?.name != it.toString()
+            }
+            etWorkField.doAfterTextChanged {
+                changesMade = user?.workField != it.toString()
+            }
+            etCity.doAfterTextChanged {
+                changesMade = user?.city != it.toString()
+            }
+            etLocality.doAfterTextChanged {
+                changesMade = user?.locality != it.toString()
+            }
+            etPhone.doAfterTextChanged {
+                changesMade = user?.contactNumber != it.toString()
+            }
+            etEquipment.doAfterTextChanged {
+                val equipment = it.toString() == "Yes"
+                changesMade = user?.equipmentAvailable != equipment
+            }
+            etLastWorkAt.doAfterTextChanged {
+                changesMade = user?.lastWorkAt != it.toString()
+            }
+            etEducation.doAfterTextChanged {
+                changesMade = user?.education != it.toString()
+            }
+
+            changesMade = user?.photoId != aadharUrl
+            changesMade = user?.workPhoto != workPhotoUrl
+        }
     }
 
     private fun setUserData(user: User?) {
@@ -527,10 +570,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     etName.validateIsNotError("Name cannot be empty") &&
                             etWorkField.validateIsNotError("Please choose a work field") &&
                             etCity.validateIsNotError("Please choose a city") &&
-                            etLocality.validateIsNotError("Please enter your locality") &&
-                            etLastWorkAt.validateIsNotError("Empty last work place") &&
-                            aadharUrl.isNotEmpty() &&
-                            workPhotoUrl.isNotEmpty()
+                            etLocality.validateIsNotError("Please enter your locality")
                 ){
                     val userName = etName.text.toString()
                     val userCategory = etWorkField.text.toString()
@@ -606,6 +646,13 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (changesMade){
+            Toast.makeText(requireContext(), "Changes were made", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
