@@ -3,6 +3,7 @@ package com.servicechowk.app.ui.fragments
 import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,7 +16,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -34,6 +35,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.servicechowk.app.R
 import com.servicechowk.app.data.model.User
 import com.servicechowk.app.databinding.ChooserDialogBinding
+import com.servicechowk.app.databinding.ConfirmationDialogBinding
 import com.servicechowk.app.databinding.FragmentRegisterBinding
 import com.servicechowk.app.databinding.UploadingDialogBinding
 import com.servicechowk.app.other.Constants
@@ -94,6 +96,16 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
     private var workPhotoUrl = ""
 
     private var changesMade = false
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                showConfirmationDialog()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -358,11 +370,15 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                 btnChatRoom.isVisible = true
 
                 btnChatRoom.setOnClickListener {
-                    val bundle = bundleOf(
-                        "providerId" to auth.currentUser?.uid,
-                        "providerFCMToken" to user1.fcmToken
-                    )
-                    findNavController().navigate(R.id.action_registerFragment_to_chatRoomFragment,bundle)
+                    if (changesMade){
+                        showConfirmationDialog()
+                    }else {
+                        val bundle = bundleOf(
+                                "providerId" to auth.currentUser?.uid,
+                                "providerFCMToken" to user1.fcmToken
+                        )
+                        findNavController().navigate(R.id.action_registerFragment_to_chatRoomFragment, bundle)
+                    }
                 }
 
                 Glide.with(requireContext())
@@ -561,7 +577,11 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
 
             imgBack.setOnClickListener {
-                findNavController().navigateUp()
+                if (changesMade){
+                    showConfirmationDialog()
+                }else{
+                    findNavController().navigateUp()
+                }
             }
 
 
@@ -648,11 +668,61 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
         _binding = null
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (changesMade){
-            Toast.makeText(requireContext(), "Changes were made", Toast.LENGTH_SHORT).show()
+
+
+    private fun showConfirmationDialog() {
+        val dialog = Dialog(requireContext())
+        val dialogBinding = ConfirmationDialogBinding.inflate(requireActivity().layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialog.setCancelable(false)
+
+        dialogBinding.apply {
+            tvDiscard.setOnClickListener {
+                dialog.cancel()
+                changesMade = false
+                onDestroyView()
+            }
+
+            tvSave.setOnClickListener {
+                val userName = binding.etName.text.toString()
+                val userCategory = binding.etWorkField.text.toString()
+                val userCity = binding.etCity.text.toString()
+                val userLocality = binding.etLocality.text.toString()
+                val userPhoneNumber = auth.currentUser?.phoneNumber
+                val equipmentInput = binding.etEquipment.text.toString()
+                val userEquipmentAvailable = equipmentInput == "Yes"
+                val userEducation = binding.etEducation.text.toString()
+                val lastWorkPlace = binding.etLastWorkAt.text.toString()
+
+                newUser?.apply {
+                    name = userName
+                    workField = userCategory
+                    city = userCity
+                    locality=  userLocality
+                    contactNumber = userPhoneNumber
+                    equipmentAvailable = userEquipmentAvailable
+                    education = userEducation
+                    lastWorkAt = lastWorkPlace
+                    photoId  = aadharUrl
+                    workPhoto = workPhotoUrl
+                    photo = profileUrl
+                }
+
+                newUser?.let { it1 -> vm.addUser(it1) }
+                changesMade = false
+                dialog.dismiss()
+            }
+
         }
+
+        dialog.show()
+
+        val window = dialog.window
+        window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
     }
 
 }

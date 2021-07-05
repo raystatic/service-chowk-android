@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Changes?"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your changes will be discard if you don't save them."
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Discard"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:background="@drawable/black_stroke_bg"
+            android:padding="16dp"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/tvDiscard"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:background="@drawable/black_stroke_bg"
+            android:padding="16dp"
+            app:backgroundTint="@color/chateau_green"
+            android:layout_marginStart="10dp"
+            android:id="@+id/tvSave"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
