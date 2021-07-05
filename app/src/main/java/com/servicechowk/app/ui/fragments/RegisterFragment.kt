@@ -31,6 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
 import com.servicechowk.app.R
 import com.servicechowk.app.data.model.User
@@ -196,11 +197,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
         initUI()
 
-        subscribeToObservers()
+        subscribeToObservers(user)
 
         vm.upadateToken(prefManager.getString(Constants.FCM_TOKEN).toString(),userId = user?.uid.toString())
-
-        vm.getUserData(userId = user?.uid.toString())
 
     }
 
@@ -219,7 +218,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
 
 
-    private fun subscribeToObservers() {
+    private fun subscribeToObservers(user:FirebaseUser?) {
 
         vm.updateToken.observe(viewLifecycleOwner, {
             binding.apply {
@@ -230,6 +229,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         } else {
                             Log.d(TAG, "subscribeToObservers: FCM TOKEN NOT UPDATED")
                         }
+                        vm.getUserData(userId = user?.uid.toString())
                     }
 
                     Status.ERROR -> {
@@ -237,6 +237,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     }
 
                     Status.LOADING -> {
+                        showProgressDialog("Loading Data...")
                     }
                 }
             }
@@ -348,7 +349,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     }
 
                     Status.LOADING  -> {
-                        showProgressDialog("Loading Data...")
+//                        showProgressDialog("Loading Data...")
                     }
                 }
             }
