@@ -15,11 +15,20 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/athens_gray"
-            android:paddingTop="16dp"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:paddingTop="10dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="10dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/logo"
+                android:id="@+id/imgLogo"
+                android:layout_centerVertical="true"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -28,6 +37,8 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@+id/imgLogo"
                 android:layout_centerVertical="true"/>
 
             <TextView
@@ -40,7 +51,20 @@
                 android:padding="10dp"
                 android:layout_centerVertical="true"
                 android:text="@string/login_as_provider"
+                android:visibility="gone"
                 android:layout_alignParentEnd="true"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:scaleType="centerCrop"
+                android:id="@+id/imgProfile"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/person"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/black"
+                />
 
 
         </RelativeLayout>
@@ -57,70 +81,93 @@
         android:paddingEnd="16dp"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relField">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Choose Category"
-                android:textColor="@color/black"
-                android:id="@+id/tvCategoryTitle"
-                android:textSize="12sp"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:textSize="12sp"
-                android:id="@+id/tvWorkField"
+            <RelativeLayout
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvCategoryTitle"
-                android:hint="Select"
-                android:layout_marginEnd="60dp"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray"/>
+                android:id="@+id/relField"
+                android:layout_marginEnd="10dp">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Category"
+                    android:textColor="@color/black"
+                    android:id="@+id/tvCategoryTitle"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_centerVertical="true"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relCity">
+                <TextView
+                    android:textSize="12sp"
+                    android:id="@+id/tvWorkField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/tvCategoryTitle"
+                    android:hint="Select"
+                    android:text="Select Category"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:gravity="center"
+                    android:drawableEnd="@drawable/ic_down"
+                    android:textAlignment="center"
+                    android:background="@drawable/gray_stroke_bg"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Choose City"
-                android:textColor="@color/black"
-                android:id="@+id/tvCityTitle"
-                android:textSize="12sp"
-                android:layout_centerVertical="true"/>
+            </RelativeLayout>
 
-            <TextView
-                android:textSize="12sp"
-                android:id="@+id/tvCity"
+            <RelativeLayout
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/tvCityTitle"
-                android:hint="Select"
-                android:layout_marginEnd="60dp"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray"/>
+                android:id="@+id/relCity"
+                android:layout_marginStart="10dp">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose City"
+                    android:textColor="@color/black"
+                    android:id="@+id/tvCityTitle"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:textSize="12sp"
+                    android:id="@+id/tvCity"
+                    android:text="Select City"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/tvCityTitle"
+                    android:hint="Select"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:drawableEnd="@drawable/ic_down"
+                    android:textAlignment="center"
+                    android:background="@drawable/gray_stroke_bg"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/relLocality">
-
-
 
         </RelativeLayout>
 
@@ -164,9 +211,11 @@
         android:textColor="@color/black"
         android:id="@+id/tvLocalityTitle"
         android:textSize="12sp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:layout_marginStart="16dp"
         android:layout_below="@id/relFilter"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="16dp"/>
 
 
     <EditText
@@ -174,7 +223,6 @@
         android:id="@+id/etLocality"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginEnd="60dp"
         android:layout_toEndOf="@+id/tvLocalityTitle"
         android:padding="10dp"

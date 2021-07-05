@@ -32,6 +32,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.storage.FirebaseStorage
 import com.servicechowk.app.R
 import com.servicechowk.app.data.model.User
@@ -250,6 +251,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                    Status.SUCCESS -> {
                         if (it.data!=null && it.data){
                             root.showSnack("User updated successfully")
+
                         }else{
                             root.showSnack(Constants.SOMETHING_WENT_WRONG)
                         }
@@ -643,6 +645,19 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     }
 
                     newUser?.let { it1 -> vm.addUser(it1) }
+
+                    val profileUpdates = userProfileChangeRequest {
+                        photoUri = Uri.parse(newUser?.photo)
+                    }
+
+                    auth.currentUser?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener {
+                            if (it.isSuccessful){
+                                Log.d(TAG, "initUI: Firebase user profile photo updated")
+                            }else{
+                                Log.d(TAG, "initUI: Firebase user profile photo not updated")
+                            }
+                        }
 
                 }else{
                     return@setOnClickListener

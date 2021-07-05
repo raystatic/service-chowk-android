@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.servicechowk.app.R
@@ -21,6 +22,7 @@ import com.servicechowk.app.data.model.ProviderLocality
 import com.servicechowk.app.databinding.FragmentHomeBinding
 import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Extensions.showSnack
+import com.servicechowk.app.other.GlideApp
 import com.servicechowk.app.other.Status
 import com.servicechowk.app.other.Utility
 import com.servicechowk.app.ui.adapters.LocalityFilterAdapter
@@ -34,7 +36,7 @@ import javax.inject.Inject
 class HomeFragment: Fragment(R.layout.fragment_home) {
 
     private var _binding: FragmentHomeBinding?=null
-    private val binding:FragmentHomeBinding get() = _binding!!
+    private val binding: FragmentHomeBinding get() = _binding!!
 
     private val vm by viewModels<HomeViewModel>()
 
@@ -162,11 +164,33 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
             if (user == null){
                 btnEnd.text = "Login as Provider"
+                btnEnd.isVisible = true
+                imgProfile.isVisible  = false
             }else{
-                btnEnd.text ="Profile"
+
+                btnEnd.text ="My Profile"
+                println("PROFILEDEBUG: ${user.photoUrl}")
+                if (user.photoUrl.toString().isEmpty()){
+                    btnEnd.isVisible = true
+                    imgProfile.isVisible  = false
+                }else{
+                    btnEnd.isVisible = false
+                    imgProfile.isVisible  = true
+                    Glide.with(requireContext())
+                        .load(user.photoUrl.toString())
+                        .placeholder(R.drawable.person)
+                        .error(R.drawable.person)
+                        .into(imgProfile)
+                }
+
             }
 
             btnEnd.setOnClickListener {
+                if (user == null) findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
+            }
+
+            imgProfile.setOnClickListener {
                 if (user == null) findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
                 else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
             }
@@ -181,7 +205,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 adapter = providersAdapter
             }
 
-            val list = mutableListOf<String>("Select")
+            val list = mutableListOf<String>("Select Category")
             list.addAll(Constants.categories.toList())
 
             showListPopupWindow(list,tvWorkField,1)
@@ -198,7 +222,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                     citiesList.add(city)
                 }
 
-                val myCitiesList = mutableListOf<String>("Select")
+                val myCitiesList = mutableListOf<String>("Select City")
                 myCitiesList.addAll(citiesList)
 
                 showListPopupWindow(myCitiesList,tvCity,2)
@@ -269,14 +293,15 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 val currentFilter = vm.getCurrentFilter()
                 if (position == 0){
                     textView.hint = "Select"
-                    textView.text = ""
 
                     when(filterType){
                         1 -> {
                             currentFilter?.field = null
+                            textView.text = "Select Category"
                         }
                         2-> {
                             currentFilter?.city = null
+                            textView.text = "Select City"
                         }
                     }
                     currentFilter?.let { vm.setHomeFilter(it) }
