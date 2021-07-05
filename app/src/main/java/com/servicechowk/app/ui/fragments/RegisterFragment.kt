@@ -173,6 +173,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
         if (user == null) findNavController().navigateUp()
 
+
         permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             readPermissionGranted = permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: readPermissionGranted
             writePermissionGranted = permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: writePermissionGranted
@@ -197,6 +198,8 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
         subscribeToObservers()
 
+        vm.upadateToken(prefManager.getString(Constants.FCM_TOKEN).toString(),userId = user?.uid.toString())
+
         vm.getUserData(userId = user?.uid.toString())
 
     }
@@ -217,6 +220,28 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
 
     private fun subscribeToObservers() {
+
+        vm.updateToken.observe(viewLifecycleOwner, {
+            binding.apply {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        if (it.data != null && it.data) {
+                            Log.d(TAG, "subscribeToObservers: FCM TOKEN UPDATED")
+                        } else {
+                            Log.d(TAG, "subscribeToObservers: FCM TOKEN NOT UPDATED")
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        Log.d(TAG, "subscribeToObservers: FCM TOKEN NOT UPDATED")
+                    }
+
+                    Status.LOADING -> {
+                    }
+                }
+            }
+        })
+
 
         vm.addingUser.observe(viewLifecycleOwner,{
            binding.apply {

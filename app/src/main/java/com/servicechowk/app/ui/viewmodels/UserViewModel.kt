@@ -34,6 +34,21 @@ class UserViewModel @Inject constructor(
     private val _addingUser = SingleLiveEvent<Resource<Boolean>>()
     val addingUser:SingleLiveEvent<Resource<Boolean>> get() = _addingUser
 
+    private val _updateToken = SingleLiveEvent<Resource<Boolean>>()
+    val updateToken:SingleLiveEvent<Resource<Boolean>> get() = _updateToken
+
+    fun upadateToken(token:String, userId: String){
+        _updateToken.postValue(Resource.loading(null))
+        repository.updateFCMToken(token, userId)
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        _updateToken.postValue(Resource.success(true))
+                    }else{
+                        _updateToken.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
+                    }
+                }
+    }
+
 
     fun addUser(user: com.servicechowk.app.data.model.User){
         _addingUser.postValue(Resource.loading(null))

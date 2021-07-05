@@ -15,6 +15,12 @@ class UserRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 
+    fun updateFCMToken(token:String,userId: String):Task<Void>{
+        return firestore.collection("users")
+                .document(userId)
+                .update("fcmToken",token)
+    }
+
     fun addLocality(locality:ProviderLocality, userId: String): Task<Void> {
         return firestore.collection("localities")
                 .document(userId)
