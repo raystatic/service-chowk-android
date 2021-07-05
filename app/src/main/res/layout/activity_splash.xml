@@ -54,6 +54,7 @@
             android:textColor="@color/black"
             android:background="@drawable/gray_stroke_bg"
             android:padding="16dp"
+            android:id="@+id/tvCustomer"
             android:textAlignment="center"/>
 
         <TextView
@@ -66,6 +67,7 @@
             android:background="@drawable/gray_stroke_bg"
             android:backgroundTint="@color/chateau_green"
             android:padding="16dp"
+            android:id="@+id/tvServive"
             android:textAlignment="center"
             android:layout_marginTop="16dp"/>
 

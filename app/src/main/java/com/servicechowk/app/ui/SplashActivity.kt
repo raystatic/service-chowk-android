@@ -6,13 +6,18 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.servicechowk.app.R
+import com.servicechowk.app.databinding.ActivitySplashBinding
 import com.servicechowk.app.other.Utility
 import kotlinx.android.synthetic.main.activity_main.*
 
 class SplashActivity : BaseActivity() {
+
+    private lateinit var binding:ActivitySplashBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         Utility.enableDarkTheme(false)
 
@@ -36,6 +41,18 @@ class SplashActivity : BaseActivity() {
             startActivity(intent)
             finish()
 
+        }
+
+        binding.apply {
+            tvCustomer.setOnClickListener {
+                startActivity(Intent(this@SplashActivity,MainActivity::class.java))
+                finish()
+            }
+
+            tvServive.setOnClickListener {
+                startActivity(Intent(this@SplashActivity,MainActivity::class.java))
+                finish()
+            }
         }
 
     }
