@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding:ActivityMainBinding
 
@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        Utility.enableDarkTheme(false)
 
         val providerFCMToken = intent?.getStringExtra("providerFCMToken")
         val providerId = intent?.getStringExtra("providerId")
