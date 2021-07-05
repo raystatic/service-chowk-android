@@ -48,15 +48,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
-
-
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            android:layout_marginTop="10dp"
             android:overScrollMode="never">
 
             <LinearLayout
@@ -70,6 +69,7 @@
                     android:src="@drawable/person"
                     android:id="@+id/imgProfile"
                     android:scaleType="centerCrop"
+                    android:layout_marginTop="16dp"
                     android:layout_gravity="center_horizontal"/>
 
                 <TextView

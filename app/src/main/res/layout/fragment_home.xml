@@ -23,8 +23,8 @@
             android:paddingBottom="10dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/logo"
                 android:id="@+id/imgLogo"
                 android:layout_centerVertical="true"
@@ -37,6 +37,7 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@+id/imgLogo"
                 android:layout_centerVertical="true"/>
@@ -225,7 +226,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="60dp"
         android:layout_toEndOf="@+id/tvLocalityTitle"
-        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:gravity="start"
         android:hint="Type here..."
         android:drawablePadding="5dp"

@@ -111,6 +111,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        checkPermission()
+
         val currentRef = storage.reference.child("images/${auth.currentUser?.phoneNumber}")
 
         val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -118,31 +121,34 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
         }
 
         val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicturePreview()){
-            if (writePermissionGranted){
-                val saved = savePhotoToInternalStorage(bmp = it)
-                if (!saved){
-                    binding.root.showSnack("Couldn't Save Image!")
-                    currentFileName = ""
-                }else{
-                    lifecycleScope.launch {
-                        val file = loadImageFromInternalStorage(currentFileName)
-                        file?.let {
-                            Log.d(TAG, "onCreate: File loaded: ${it.absolutePath} | ${it.path} | ${it.canonicalPath}}")
-                            try {
-                                val stream = FileInputStream(it)
-                                vm.uploadFile(currentRef.child(currentFileName),stream,currentFileName)
-                            }catch (e:Exception){
-                                e.printStackTrace()
-                                binding.root.showSnack("File not found.")
+            if (it!=null){
+                println("SDKDEBUG: check $writePermissionGranted")
+                if (writePermissionGranted){
+                    val saved = savePhotoToInternalStorage(bmp = it)
+                    if (!saved){
+                        binding.root.showSnack("Couldn't Save Image!")
+                        currentFileName = ""
+                    }else{
+                        lifecycleScope.launch {
+                            val file = loadImageFromInternalStorage(currentFileName)
+                            file?.let {
+                                Log.d(TAG, "onCreate: File loaded: ${it.absolutePath} | ${it.path} | ${it.canonicalPath}}")
+                                try {
+                                    val stream = FileInputStream(it)
+                                    vm.uploadFile(currentRef.child(currentFileName),stream,currentFileName)
+                                }catch (e:Exception){
+                                    e.printStackTrace()
+                                    binding.root.showSnack("File not found.")
+                                }
+                            } ?: kotlin.run {
+                                Log.d(TAG, "onCreate: File not found")
                             }
-                        } ?: kotlin.run {
-                            Log.d(TAG, "onCreate: File not found")
                         }
+                        Log.d(TAG, "onCreate: output uri: $saved")
                     }
-                    Log.d(TAG, "onCreate: output uri: $saved")
+                }else{
+                    requireContext().showToast("Permission not Granted to take save photo")
                 }
-            }else{
-                requireContext().showToast("Permission not Granted to take save photo")
             }
         }
 
@@ -296,7 +302,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                                         .into(imgWorkPhoto)
                                 }
                                 Constants.PROFILE_NAME -> {
+                                    println("URLDEBUG: $profileUrl | ${it.first}")
                                     changesMade = profileUrl != it.first
+                                    println("URLDEBUG: changes: $changesMade")
                                     profileUrl = it.first
                                     Glide.with(requireContext())
                                         .load(profileUrl)
@@ -458,7 +466,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
         )
     }
 
-    private fun updateOrRequestPermissionOrShowDialog(){
+    private fun checkPermission(){
         val hasReadPermission = ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE
@@ -471,8 +479,14 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
         val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
+        println("SDKDEBUG: $minSdk29")
+
         readPermissionGranted = hasReadPermission
         writePermissionGranted = hasWritePermission || minSdk29
+    }
+
+    private fun updateOrRequestPermissionOrShowDialog(){
+
 
         val permissionsToRequest = mutableListOf<String>()
         if (!writePermissionGranted){
