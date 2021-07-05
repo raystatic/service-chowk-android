@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.servicechowk.app.R
 import com.servicechowk.app.data.model.HomeFilter
+import com.servicechowk.app.data.model.ProviderLocality
 import com.servicechowk.app.databinding.FragmentHomeBinding
 import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Extensions.showSnack
@@ -72,16 +73,6 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             }
         )
 
-        providerLocalityFilterAdapter = LocalityFilterAdapter {
-            binding.etLocality.setText(it)
-            binding.rvLocalityFilter.isVisible = false
-
-            val currentFilter = vm.getCurrentFilter()
-            currentFilter?.locality=  it
-            currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
-
-        }
-
         initUI(user)
 
 
@@ -102,7 +93,32 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                         it.data?.let {
                             println("LOCALITYDEBUG: $it")
                            // showListPopupWindowForLocality(it.map { it.value },etLocality)
-                            providerLocalityFilterAdapter.submitData(it)
+                            providerLocalityFilterAdapter = LocalityFilterAdapter(
+                                    onClick = {
+                                        binding.etLocality.setText(it)
+                                        binding.etLocality.setSelection(binding.etLocality.text.toString().length)
+
+                                        val currentFilter = vm.getCurrentFilter()
+                                        currentFilter?.locality=  it
+                                        currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
+                                    },
+                                    currentList = it as ArrayList<ProviderLocality>
+                            )
+
+                            rvLocalityFilter.apply {
+                                layoutManager = LinearLayoutManager(requireContext())
+                                adapter = providerLocalityFilterAdapter
+                            }
+
+                            etLocality.doAfterTextChanged {
+                                providerLocalityFilterAdapter.filter.filter(it.toString())
+                                if(it.toString().isEmpty()){
+                                    val currentFilter = vm.getCurrentFilter()
+                                    currentFilter?.locality=  null
+                                    currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
+                                }
+
+                            }
                         }
                     }
                     Status.ERROR -> {
@@ -155,6 +171,10 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
             }
 
+//            rvLocalityFilter.apply {
+//                layoutManager = LinearLayoutManager(requireContext())
+//                adapter = providerLocalityFilterAdapter
+//            }
 
             rvProviders.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -185,24 +205,20 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
             }
 
-            etLocality.doAfterTextChanged {
-                val text = it.toString()
-                rvLocalityFilter.isVisible =text.isNotEmpty()
 
-                if(text.isEmpty()){
-                    val currentFilter = vm.getCurrentFilter()
-                    currentFilter?.locality=  null
-                    currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
-                }
-            }
+//            etLocality.doAfterTextChanged {
+//                val text = it.toString()
+//                rvLocalityFilter.isVisible =text.isNotEmpty()
+//
+//                if(text.isEmpty()){
+//                    val currentFilter = vm.getCurrentFilter()
+//                    currentFilter?.locality=  null
+//                    currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
+//                }
+//            }
+            rvLocalityFilter.isVisible = true
 
-            rvLocalityFilter.isVisible = false
-
-            rvLocalityFilter.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = providerLocalityFilterAdapter
-            }
-
+           // rvLocalityFilter.isVisible = false
 
         }
 

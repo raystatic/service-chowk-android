@@ -34,6 +34,7 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
 
     private val vm by viewModels<ChatViewModel>()
 
+
     private lateinit var chatAdapter: ChatAdapter
     private var myId = ""
     private var provider:User?=null
