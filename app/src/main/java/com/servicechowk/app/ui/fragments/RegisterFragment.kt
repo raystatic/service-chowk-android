@@ -101,12 +101,25 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+    }
+
+    private fun attachBackPressedListener(){
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                showConfirmationDialog()
+                println("BACKPRESSED: called: $changesMade")
+                if (changesMade){
+                    showConfirmationDialog()
+                }else{
+                    findNavController().navigateUp()
+                }
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        attachBackPressedListener()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -753,32 +766,61 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
             }
 
             tvSave.setOnClickListener {
-                val userName = binding.etName.text.toString()
-                val userCategory = binding.etWorkField.text.toString()
-                val userCity = binding.etCity.text.toString()
-                val userLocality = binding.etLocality.text.toString()
-                val userPhoneNumber = auth.currentUser?.phoneNumber
-                val equipmentInput = binding.etEquipment.text.toString()
-                val userEquipmentAvailable = equipmentInput == "Yes"
-                val userEducation = binding.etEducation.text.toString()
-                val lastWorkPlace = binding.etLastWorkAt.text.toString()
+                dialog.dismiss()
 
-                newUser?.apply {
-                    name = userName
-                    workField = userCategory
-                    city = userCity
-                    locality=  userLocality
-                    contactNumber = userPhoneNumber
-                    equipmentAvailable = userEquipmentAvailable
-                    education = userEducation
-                    lastWorkAt = lastWorkPlace
-                    photoId  = aadharUrl
-                    workPhoto = workPhotoUrl
-                    photo = profileUrl
+                if (
+                        binding.etName.validateIsNotError("Name cannot be empty") &&
+                        binding.etWorkField.validateIsNotError("Please choose a work field") &&
+                        binding.etCity.validateIsNotError("Please choose a city") &&
+                        binding.etLocality.validateIsNotError("Please enter your locality")
+                ){
+                    val userName = binding.etName.text.toString()
+                    val userCategory = binding.etWorkField.text.toString()
+                    val userCity = binding.etCity.text.toString()
+                    val userLocality = binding.etLocality.text.toString()
+                    val userPhoneNumber = auth.currentUser?.phoneNumber
+                    val equipmentInput = binding.etEquipment.text.toString()
+                    val userEquipmentAvailable = equipmentInput == "Yes"
+                    val userEducation = binding.etEducation.text.toString()
+                    val lastWorkPlace = binding.etLastWorkAt.text.toString()
+
+                    newUser?.apply {
+                        name = userName
+                        workField = userCategory
+                        city = userCity
+                        locality=  userLocality
+                        contactNumber = userPhoneNumber
+                        equipmentAvailable = userEquipmentAvailable
+                        education = userEducation
+                        lastWorkAt = lastWorkPlace
+                        photoId  = aadharUrl
+                        workPhoto = workPhotoUrl
+                        photo = profileUrl
+                    }
+
+                    println("REGISTERDEBUG: $newUser")
+
+                    newUser?.let { it1 -> vm.addUser(it1) }
+
+                    val profileUpdates = userProfileChangeRequest {
+                        photoUri = Uri.parse(newUser?.photo ?: "")
+                    }
+
+                    auth.currentUser?.updateProfile(profileUpdates)
+                            ?.addOnCompleteListener {
+                                if (it.isSuccessful){
+                                    Log.d(TAG, "initUI: Firebase user profile photo updated")
+                                }else{
+                                    Log.d(TAG, "initUI: Firebase user profile photo not updated")
+                                }
+                            }
+
+                    changesMade = false
+
+                }else{
+                    return@setOnClickListener
                 }
 
-                newUser?.let { it1 -> vm.addUser(it1) }
-                changesMade = false
                 dialog.dismiss()
             }
 
