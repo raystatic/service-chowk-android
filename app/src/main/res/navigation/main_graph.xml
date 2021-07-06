@@ -46,7 +46,11 @@
     <fragment
         android:id="@+id/providerProfileViewFragment"
         android:name="com.servicechowk.app.ui.fragments.ProviderProfileViewFragment"
-        android:label="ProviderProfileViewFragment" />
+        android:label="ProviderProfileViewFragment" >
+        <action
+            android:id="@+id/action_providerProfileViewFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.servicechowk.app.ui.fragments.ChatFragment"

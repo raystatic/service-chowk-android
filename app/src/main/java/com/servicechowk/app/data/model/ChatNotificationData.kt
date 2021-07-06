@@ -6,5 +6,6 @@ data class ChatNotificationData(
     val providerFCMToken:String,
     val providerId:String,
     val consumerId:String,
-    val isConsumer:String
+    val isConsumer:String,
+    val sound:String
 )

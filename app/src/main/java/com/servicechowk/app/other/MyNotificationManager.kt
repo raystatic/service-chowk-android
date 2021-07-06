@@ -30,7 +30,7 @@ class MyNotificationManager(
 
         val mBuilder: NotificationCompat.Builder =
             NotificationCompat.Builder(mCtx, Constants.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)

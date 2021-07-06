@@ -169,7 +169,8 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
                         providerFCMToken = chat.providerFCMTOKEN.toString(),
                         providerId = chat.providerId.toString(),
                         consumerId = chat.consumerId.toString(),
-                        isConsumer = setIsConsumer
+                        isConsumer = setIsConsumer,
+                        sound = "default"
                     )
 
                     val data = ChatNotificationData(
@@ -178,13 +179,17 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
                         providerFCMToken = chat.providerFCMTOKEN.toString(),
                         providerId = chat.providerId.toString(),
                         consumerId = chat.consumerId.toString(),
-                        isConsumer = setIsConsumer
+                        isConsumer = setIsConsumer,
+                        sound = "default"
                     )
 
                     val chatNotificationRequest = ChatNotificationRequest(
                         to = toFCMTOKEN.toString(),
                         notification = notification,
-                        data = data
+                        data = data,
+                        priority = 10,
+                        android = ChatAndroidData("high"),
+                        webpush = ChatWebPush(headers = ChatWebPushHeaders(Urgency = "high"))
                     )
 
                     vm.sendNotification(chatNotificationRequest)

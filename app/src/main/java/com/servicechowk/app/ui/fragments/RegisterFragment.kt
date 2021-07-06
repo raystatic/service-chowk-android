@@ -206,6 +206,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
         subscribeToObservers(user)
 
+        val phone = auth.currentUser?.phoneNumber
+        binding.etPhone.setText(phone?.substring(range = 3 until phone.length))
+
         vm.upadateToken(prefManager.getString(Constants.FCM_TOKEN).toString(),userId = user?.uid.toString())
 
     }
@@ -240,6 +243,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     }
 
                     Status.ERROR -> {
+                        vm.getUserData(userId = user?.uid.toString())
                         Log.d(TAG, "subscribeToObservers: FCM TOKEN NOT UPDATED")
                     }
 
@@ -354,6 +358,14 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     }
 
                     Status.ERROR -> {
+                        newUser = User(
+                                id = auth.currentUser?.uid.toString(),
+                                isVerified = false,
+                                fcmToken = prefManager.getString(Constants.FCM_TOKEN)
+                        )
+                        val phone = auth.currentUser?.phoneNumber
+                        etPhone.setText(phone?.substring(range = 3 until phone.length))
+                        changesMade = false
                         if (uploading.isShowing) uploading.cancel()
                         root.showSnack(it.message.toString())
                     }
@@ -658,10 +670,12 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                         photo = profileUrl
                     }
 
+                    println("REGISTERDEBUG: $newUser")
+
                     newUser?.let { it1 -> vm.addUser(it1) }
 
                     val profileUpdates = userProfileChangeRequest {
-                        photoUri = Uri.parse(newUser?.photo)
+                        photoUri = Uri.parse(newUser?.photo ?: "")
                     }
 
                     auth.currentUser?.updateProfile(profileUpdates)
