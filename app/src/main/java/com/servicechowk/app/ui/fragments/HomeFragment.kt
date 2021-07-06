@@ -1,6 +1,8 @@
 package com.servicechowk.app.ui.fragments
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -18,11 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.servicechowk.app.R
 import com.servicechowk.app.data.model.HomeFilter
+import com.servicechowk.app.data.model.Info
 import com.servicechowk.app.data.model.ProviderLocality
 import com.servicechowk.app.databinding.FragmentHomeBinding
 import com.servicechowk.app.other.Constants
 import com.servicechowk.app.other.Extensions.showSnack
-import com.servicechowk.app.other.GlideApp
 import com.servicechowk.app.other.Status
 import com.servicechowk.app.other.Utility
 import com.servicechowk.app.ui.adapters.LocalityFilterAdapter
@@ -31,6 +33,7 @@ import com.servicechowk.app.ui.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class HomeFragment: Fragment(R.layout.fragment_home) {
@@ -50,29 +53,44 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
+        try {
+            val pInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+            val version = pInfo.versionName
+            val info = Info(
+                    version = version
+            )
+            vm.addConfig(
+                    info = info,
+                    deviceId = Utility.getDeviceId(requireContext())
+            )
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+            Log.d("onViewCreated: ", "Cannot update version")
+        }
+
         val user = auth.currentUser
 
         providersAdapter = ProvidersAdapter(
-            currentUserId = user?.uid,
-            onStartChat = {
-                val bundle = bundleOf(
-                    "isConsumer" to true,
-                    "providerId" to it.id,
-                    "consumerId" to Utility.getDeviceId(requireContext()),
-                    "providerFCMToken" to it.fcmToken
-                )
-                findNavController().navigate(R.id.action_homeFragment_to_chatFragment,bundle)
-            },
-            onViewProfile = {
-                val bundle = bundleOf(
-                        "userId" to it.id
-                )
-                findNavController().navigate(R.id.action_homeFragment_to_providerProfileViewFragment,bundle)
-            },
-            openMyProfile = {
-                if (user == null) findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-                else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
-            }
+                currentUserId = user?.uid,
+                onStartChat = {
+                    val bundle = bundleOf(
+                            "isConsumer" to true,
+                            "providerId" to it.id,
+                            "consumerId" to Utility.getDeviceId(requireContext()),
+                            "providerFCMToken" to it.fcmToken
+                    )
+                    findNavController().navigate(R.id.action_homeFragment_to_chatFragment, bundle)
+                },
+                onViewProfile = {
+                    val bundle = bundleOf(
+                            "userId" to it.id
+                    )
+                    findNavController().navigate(R.id.action_homeFragment_to_providerProfileViewFragment, bundle)
+                },
+                openMyProfile = {
+                    if (user == null) findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                    else findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
+                }
         )
 
         initUI(user)
@@ -82,26 +100,26 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         vm.getLocalities()
 
-        vm.setHomeFilter(HomeFilter(null,null,null))
+        vm.setHomeFilter(HomeFilter(null, null, null))
 
     }
 
     private fun subscribeToObservers() {
 
-        vm.localities.observe(viewLifecycleOwner,{
+        vm.localities.observe(viewLifecycleOwner, {
             binding.apply {
-                when(it.status){
-                    Status.SUCCESS ->{
+                when (it.status) {
+                    Status.SUCCESS -> {
                         it.data?.let {
                             println("LOCALITYDEBUG: $it")
-                           // showListPopupWindowForLocality(it.map { it.value },etLocality)
+                            // showListPopupWindowForLocality(it.map { it.value },etLocality)
                             providerLocalityFilterAdapter = LocalityFilterAdapter(
                                     onClick = {
                                         binding.etLocality.setText(it)
                                         binding.etLocality.setSelection(binding.etLocality.text.toString().length)
 
                                         val currentFilter = vm.getCurrentFilter()
-                                        currentFilter?.locality=  it
+                                        currentFilter?.locality = it
                                         currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
                                     },
                                     currentList = it as ArrayList<ProviderLocality>
@@ -114,9 +132,9 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
                             etLocality.doAfterTextChanged {
                                 providerLocalityFilterAdapter.filter.filter(it.toString())
-                                if(it.toString().isEmpty()){
+                                if (it.toString().isEmpty()) {
                                     val currentFilter = vm.getCurrentFilter()
-                                    currentFilter?.locality=  null
+                                    currentFilter?.locality = null
                                     currentFilter?.let { it1 -> vm.setHomeFilter(it1) }
                                 }
 
@@ -134,31 +152,31 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         })
 
 
-        vm.providers.observe(viewLifecycleOwner,{
-           binding.apply {
-               when(it.status){
-                   Status.SUCCESS ->{
-                       val list = it.data
-                       rvProviders.isVisible = !list.isNullOrEmpty()
-                       tvEmpty.isVisible = list.isNullOrEmpty()
+        vm.providers.observe(viewLifecycleOwner, {
+            binding.apply {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        val list = it.data
+                        rvProviders.isVisible = !list.isNullOrEmpty()
+                        tvEmpty.isVisible = list.isNullOrEmpty()
                         it.data?.let {
                             providersAdapter.submitData(it)
                         }
-                       progressbar.isVisible = false
-                   }
-                   Status.ERROR -> {
-                       progressbar.isVisible = false
+                        progressbar.isVisible = false
+                    }
+                    Status.ERROR -> {
+                        progressbar.isVisible = false
                         root.showSnack(it.message.toString())
-                   }
-                   Status.LOADING -> {
-                       progressbar.isVisible = true
-                   }
-               }
-           }
+                    }
+                    Status.LOADING -> {
+                        progressbar.isVisible = true
+                    }
+                }
+            }
         })
     }
 
-    private fun initUI(user:FirebaseUser?) {
+    private fun initUI(user: FirebaseUser?) {
 
         binding.apply {
 
@@ -208,7 +226,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             val list = mutableListOf<String>("Select Category")
             list.addAll(Constants.categories.toList())
 
-            showListPopupWindow(list,tvWorkField,1)
+            showListPopupWindow(list, tvWorkField, 1)
 
             Utility.getJson(requireContext())?.let {
                 val citiesList = mutableListOf<String>()
@@ -225,7 +243,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 val myCitiesList = mutableListOf<String>("Select City")
                 myCitiesList.addAll(citiesList)
 
-                showListPopupWindow(myCitiesList,tvCity,2)
+                showListPopupWindow(myCitiesList, tvCity, 2)
 
             }
 
@@ -248,7 +266,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
     }
 
-    private fun showListPopupWindowForLocality(list:List<String>, editText: EditText){
+    private fun showListPopupWindowForLocality(list: List<String>, editText: EditText){
         val listPopupWindow = ListPopupWindow(requireContext())
         listPopupWindow.apply {
             setAdapter(
@@ -276,7 +294,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     }
 
 
-    private fun showListPopupWindow(list:List<String>, textView: TextView, filterType:Int){
+    private fun showListPopupWindow(list: List<String>, textView: TextView, filterType: Int){
         val listPopupWindow = ListPopupWindow(requireContext())
         listPopupWindow.apply {
             setAdapter(
@@ -299,7 +317,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                             currentFilter?.field = null
                             textView.text = "Select Category"
                         }
-                        2-> {
+                        2 -> {
                             currentFilter?.city = null
                             textView.text = "Select City"
                         }
@@ -311,7 +329,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                         1 -> {
                             currentFilter?.field = list[position]
                         }
-                        2-> {
+                        2 -> {
                             currentFilter?.city = list[position]
                         }
                     }

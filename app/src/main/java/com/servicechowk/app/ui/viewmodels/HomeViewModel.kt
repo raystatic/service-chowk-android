@@ -3,6 +3,7 @@ package com.servicechowk.app.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import com.servicechowk.app.data.model.HomeFilter
+import com.servicechowk.app.data.model.Info
 import com.servicechowk.app.data.model.ProviderLocality
 import com.servicechowk.app.data.model.User
 import com.servicechowk.app.data.repositories.HomeRepository
@@ -20,6 +21,22 @@ class HomeViewModel @Inject constructor(
     private val _homeFilter = SingleLiveEvent<HomeFilter>()
 
     private val _localHomeFilter = SingleLiveEvent<HomeFilter>()
+
+    private val _appConfig = SingleLiveEvent<Resource<Boolean>>()
+    val appConfig:SingleLiveEvent<Resource<Boolean>> get() = _appConfig
+
+    fun addConfig(info:Info, deviceId:String){
+        _appConfig.postValue(Resource.loading(null))
+        repository.addConfig(info, deviceId)
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        _appConfig.postValue(Resource.success(true))
+                    }else{
+                        _appConfig.postValue(Resource.error(it.exception?.message.toString(),null))
+                    }
+                }
+
+    }
 
 
     private val _providers = SingleLiveEvent<Resource<List<User>>>()
