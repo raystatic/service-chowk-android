@@ -56,8 +56,6 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
     @Inject
     lateinit var prefManager: PrefManager
 
-    private var callPermissionGranted = false
-
     private lateinit var requrstPermissionLauncher:ActivityResultLauncher<String>
 
     private var phoneNumber = ""
@@ -93,7 +91,7 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
 
         vm.getChats(consumerId, providerId)
 
-        vm.getUserData(providerId)
+        if (isConsumer) vm.getUserData(providerId)
 
     }
 
