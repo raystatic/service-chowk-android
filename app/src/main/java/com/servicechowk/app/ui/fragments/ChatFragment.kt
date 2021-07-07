@@ -1,7 +1,15 @@
 package com.servicechowk.app.ui.fragments
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,6 +56,12 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
     @Inject
     lateinit var prefManager: PrefManager
 
+    private var callPermissionGranted = false
+
+    private lateinit var requrstPermissionLauncher:ActivityResultLauncher<String>
+
+    private var phoneNumber = ""
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChatBinding.bind(view)
@@ -63,15 +77,70 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
 
         chatAdapter = ChatAdapter()
 
+        requrstPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){isGranted->
+            if (isGranted){
+                if (phoneNumber.isNotEmpty()){
+                    makeCall(phoneNumber)
+                }
+            }else{
+                Toast.makeText(requireContext(), "Permission not Granted", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         initUI()
 
         subscribeToObservers()
 
         vm.getChats(consumerId, providerId)
 
+        vm.getUserData(providerId)
+
+    }
+
+    private fun makeCall(phoneNumber: String) {
+        val uri = "tel:${phoneNumber.trim()}"
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse(uri))
+        startActivity(intent)
+    }
+
+    private fun checkCallPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun subscribeToObservers() {
+
+        vm.userData.observe(viewLifecycleOwner, {
+            binding.apply {
+                when(it.status){
+                    Status.SUCCESS -> {
+                        it.data?.let {
+                            val phone = it.contactNumber?.substring(range = 3 until it.contactNumber?.length!!)
+                            binding.imgCall.isVisible = true
+                            binding.imgCall.setOnClickListener {
+                                phoneNumber = phone.toString()
+                                if (checkCallPermission()){
+                                    makeCall(phoneNumber)
+                                }else{
+                                    requrstPermissionLauncher.launch(Manifest.permission.CALL_PHONE)
+                                }
+                            }
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        binding.imgCall.isVisible = false
+                    }
+
+                    Status.LOADING  -> {
+                        binding.imgCall.isVisible = false
+                    }
+                }
+            }
+        })
+
         vm.addingChat.observe(viewLifecycleOwner,{
             binding.apply {
                 when(it.status){

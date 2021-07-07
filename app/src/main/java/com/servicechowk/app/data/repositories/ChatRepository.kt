@@ -30,6 +30,10 @@ class ChatRepository @Inject constructor(
             .whereEqualTo("providerId",providerId)
     }
 
+    fun getUser(userId:String):Query{
+        return firestore.collection("users").whereEqualTo("id",userId)
+    }
+
     suspend fun sendNotification(chatNotificationRequest: ChatNotificationRequest){
         apiService.sendNotification(Constants.FIREBASE_SECRET_KEY,"application/json",chatNotificationRequest)
     }

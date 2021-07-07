@@ -10,6 +10,7 @@ import com.servicechowk.app.other.Resource
 import com.servicechowk.app.other.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -24,8 +25,32 @@ class ChatViewModel @Inject constructor(
     private val _addingChat = SingleLiveEvent<Resource<Boolean>>()
     val addingChat:SingleLiveEvent<Resource<Boolean>> get() = _addingChat
 
+    private val _userData = SingleLiveEvent<Resource<com.servicechowk.app.data.model.User>>()
+    val userData:SingleLiveEvent<Resource<com.servicechowk.app.data.model.User>> get() = _userData
+
     fun sendNotification(chatNotificationRequest: ChatNotificationRequest) = viewModelScope.launch {
         repository.sendNotification(chatNotificationRequest)
+    }
+
+    fun getUserData(userId:String){
+        _userData.postValue(Resource.loading(null))
+        try{
+            repository.getUser(userId)
+                    .addSnapshotListener { value, error ->
+                        if (error == null){
+                            if (value == null || value.isEmpty){
+                                _userData.postValue(Resource.success(null))
+                            }else{
+                                _userData.postValue(Resource.success(value.documents[0].toObject(com.servicechowk.app.data.model.User::class.java)))
+                            }
+                        }else{
+                            _userData.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG,null))
+                        }
+                    }
+        }catch (e: Exception){
+            e.printStackTrace()
+            _userData.postValue(Resource.error(Constants.SOMETHING_WENT_WRONG, null))
+        }
     }
 
     fun addChat(chat: Chat, consumerId: String, providerId: String){
