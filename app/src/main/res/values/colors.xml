@@ -10,7 +10,10 @@
 
     <color name="chateau_green">#4CB962</color>
     <color name="casablanca">#F3B149</color>
-    <color name="athens_gray">#F8F9FA</color>
+    <color name="athens_gray">#F4F4F4</color>
     <color name="danger">#FF5858</color>
     <color name="gray">#989696</color>
+    <color name="orange">#FF914D</color>
+    <color name="orange_light">#FFA500</color>
+    <color name="orange_peach">#F8C058</color>
 </resources>

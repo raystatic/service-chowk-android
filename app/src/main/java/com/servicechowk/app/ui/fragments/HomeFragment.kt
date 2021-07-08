@@ -224,7 +224,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             }
 
             val list = mutableListOf<String>("Select Category")
-            list.addAll(Constants.categories.toList())
+            list.addAll(Constants.categories.toList().sortedBy { it })
 
             showListPopupWindow(list, tvWorkField, 1)
 
@@ -243,7 +243,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 val myCitiesList = mutableListOf<String>("Select City")
                 myCitiesList.addAll(citiesList)
 
-                showListPopupWindow(myCitiesList, tvCity, 2)
+                showListPopupWindow(myCitiesList.sortedBy { it }, tvCity, 2)
 
             }
 

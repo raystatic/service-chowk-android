@@ -100,11 +100,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Profile"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textAllCaps="false"
+            android:textStyle="bold"
             android:layout_alignParentEnd="true"
             android:id="@+id/btnViewProfile"
-            android:background="@drawable/black_stroke_bg"
+            android:background="@drawable/purple_stroke_bg"
             android:layout_centerVertical="true"
             android:padding="10dp"/>
 

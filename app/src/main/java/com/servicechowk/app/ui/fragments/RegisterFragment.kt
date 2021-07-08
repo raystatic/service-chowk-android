@@ -599,7 +599,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
 
             showListPopupWindow(listOf("Yes","No"),etEquipment)
 
-            showListPopupWindow(Constants.categories.toList(),etWorkField)
+            showListPopupWindow(Constants.categories.toList().sortedBy { it },etWorkField)
 
             Utility.getJson(requireContext())?.let {
                 val citiesList = mutableListOf<String>()
@@ -613,7 +613,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register){
                     citiesList.add(city)
                 }
 
-                showListPopupWindow(citiesList,etCity)
+                showListPopupWindow(citiesList.sortedBy { it },etCity)
 
             }
 
